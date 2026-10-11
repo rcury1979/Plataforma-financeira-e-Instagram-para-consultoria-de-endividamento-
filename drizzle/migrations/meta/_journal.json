@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1791507910669,
+      "tag": "0000_mentoring_security_team_reviews_and_crm",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791508175687,
+      "tag": "0001_confirmed_signup_gifts",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791508727036,
+      "tag": "0002_admin_ai_conversation",
+      "breakpoints": true
+    }
+  ]
+}

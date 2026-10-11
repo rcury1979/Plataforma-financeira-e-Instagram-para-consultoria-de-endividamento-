@@ -1,0 +1,12 @@
+# Publicação automática: a cada mudança no GitHub, a Netlify gera e publica o site.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_FLAGS = "--legacy-peer-deps"
+  # Chaves PÚBLICAS do Supabase (podem ficar no navegador; a segurança está nas regras do banco)
+  VITE_SUPABASE_URL = "https://fhgecznujymzmzopnpyd.supabase.co"
+  VITE_SUPABASE_PUBLISHABLE_KEY = "sb_publishable_Cqw271UczmN7QmAi903QKw_xwHhjNu7"
+  VITE_SUPABASE_PROJECT_ID = "fhgecznujymzmzopnpyd"

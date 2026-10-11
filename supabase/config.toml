@@ -1,0 +1,19 @@
+project_id = "fhgecznujymzmzopnpyd"
+
+[functions.registrar-lead-planilha]
+verify_jwt = false
+
+[functions.create-checkout]
+verify_jwt = false
+
+[functions.payments-webhook]
+verify_jwt = false
+
+[functions.create-portal-session]
+verify_jwt = false
+
+[functions.chat-assistente]
+verify_jwt = false
+
+[functions.mcp]
+verify_jwt = false

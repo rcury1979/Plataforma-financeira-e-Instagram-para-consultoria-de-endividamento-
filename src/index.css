@@ -1,0 +1,255 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Brand: Onyx & Gold — sofisticado, luxuoso, premium */
+    --background: 0 0% 6%;             /* preto onyx */
+    --foreground: 42 45% 92%;          /* off-white champagne */
+
+    --card: 0 0% 9%;                   /* preto carvão */
+    --card-foreground: 42 45% 92%;
+
+    --popover: 0 0% 9%;
+    --popover-foreground: 42 45% 92%;
+
+    --primary: 42 78% 55%;             /* dourado vibrante */
+    --primary-foreground: 0 0% 6%;
+    --primary-glow: 45 85% 65%;
+
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 42 45% 92%;
+
+    --muted: 0 0% 13%;
+    --muted-foreground: 42 15% 70%;
+
+    --accent: 42 60% 22%;              /* dourado escuro */
+    --accent-foreground: 42 70% 88%;
+
+    --sage: 42 78% 55%;
+    --sage-foreground: 0 0% 6%;
+    --sage-muted: 42 40% 18%;
+
+    --gold: 42 78% 55%;
+    --gold-foreground: 0 0% 6%;
+    --gold-glow: 45 85% 65%;
+
+    --destructive: 0 70% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 42 20% 16%;
+    --input: 0 0% 14%;
+    --ring: 42 78% 55%;
+
+    --radius: 1rem;
+
+    --success: 145 50% 50%;
+    --success-foreground: 0 0% 6%;
+    --warning: 42 85% 60%;
+    --warning-foreground: 0 0% 6%;
+    --info: 200 60% 55%;
+    --info-foreground: 0 0% 6%;
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 7%;
+    --sidebar-foreground: 42 45% 92%;
+    --sidebar-primary: 42 78% 55%;
+    --sidebar-primary-foreground: 0 0% 6%;
+    --sidebar-accent: 0 0% 12%;
+    --sidebar-accent-foreground: 42 45% 92%;
+    --sidebar-border: 42 25% 22%;
+    --sidebar-ring: 42 78% 55%;
+    --sidebar-muted: 42 15% 60%;
+
+    /* Gradients — Gold luxuosos sobre preto */
+    --gradient-warm: linear-gradient(135deg, hsl(42 78% 55%) 0%, hsl(38 90% 48%) 50%, hsl(45 85% 65%) 100%);
+    --gradient-soft: linear-gradient(180deg, hsl(0 0% 8%) 0%, hsl(0 0% 5%) 100%);
+    --gradient-sage: linear-gradient(135deg, hsl(42 78% 55%) 0%, hsl(45 85% 65%) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(38 90% 48%) 0%, hsl(42 78% 55%) 50%, hsl(45 90% 70%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(0 0% 4% / 0.95) 0%, hsl(0 0% 8% / 0.85) 50%, hsl(42 60% 12% / 0.8) 100%);
+
+    /* Shadows — suaves e discretas */
+    --shadow-warm: 0 8px 24px -12px hsl(42 78% 55% / 0.18);
+    --shadow-gold: 0 10px 28px -14px hsl(42 78% 55% / 0.22);
+    --shadow-soft: 0 4px 16px -8px hsl(0 0% 0% / 0.25);
+    --shadow-card: 0 1px 2px hsl(0 0% 0% / 0.18), 0 6px 18px -12px hsl(42 78% 55% / 0.10);
+
+    /* Compatibility tokens */
+    --income: 145 50% 50%;
+    --income-foreground: 0 0% 6%;
+    --income-muted: 145 35% 14%;
+    --expense: 0 70% 55%;
+    --expense-foreground: 0 0% 100%;
+    --expense-muted: 0 50% 16%;
+    --neutral: 42 78% 55%;
+    --neutral-muted: 42 40% 18%;
+    --chart-1: 42 78% 55%;
+    --chart-2: 45 85% 65%;
+    --chart-3: 38 90% 48%;
+    --chart-4: 42 30% 50%;
+    --chart-5: 0 0% 70%;
+    --chart-6: 42 65% 40%;
+  }
+
+  .dark {
+    --background: 217 60% 8%;
+    --foreground: 42 40% 94%;
+    --card: 217 50% 12%;
+    --card-foreground: 42 40% 94%;
+    --popover: 217 50% 12%;
+    --popover-foreground: 42 40% 94%;
+    --primary: 42 78% 52%;
+    --primary-foreground: 217 60% 8%;
+    --secondary: 217 40% 16%;
+    --secondary-foreground: 42 40% 94%;
+    --muted: 217 40% 16%;
+    --muted-foreground: 42 15% 70%;
+    --accent: 217 50% 22%;
+    --accent-foreground: 42 60% 88%;
+    --border: 217 30% 22%;
+    --input: 217 30% 22%;
+  }
+}
+
+@layer base {
+  * { @apply border-border; }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-feature-settings: "ss01", "cv11";
+  }
+  h1, h2, h3, h4, .font-display {
+    font-family: 'Fraunces', Georgia, serif;
+    font-feature-settings: "ss01";
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer utilities {
+  .gradient-warm { background: var(--gradient-warm); }
+  .gradient-soft { background: var(--gradient-soft); }
+  .gradient-sage { background: var(--gradient-sage); }
+  .gradient-gold { background: var(--gradient-gold); }
+  .text-gradient-warm {
+    background: var(--gradient-warm);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .text-gradient-gold {
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .shadow-warm { box-shadow: var(--shadow-warm); }
+  .shadow-gold { box-shadow: var(--shadow-gold); }
+  .shadow-soft { box-shadow: var(--shadow-soft); }
+  .shadow-card { box-shadow: var(--shadow-card); }
+  .glass-card {
+    @apply bg-card/80 backdrop-blur-xl border border-border/60 shadow-card;
+  }
+  .stat-card-income { @apply bg-card border border-border shadow-card; }
+  .stat-card-expense { @apply bg-card border border-border shadow-card; }
+  .stat-card-neutral { @apply bg-card border border-border shadow-card; }
+  .container-prose { @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8; }
+  .animate-fade-in { animation: fade-in 0.6s ease-out both; }
+  .animate-slide-up { animation: slide-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+  /* Hover suave global para cards e linhas de tabela */
+  .hover\:shadow-warm:hover { box-shadow: var(--shadow-warm); }
+  .hover\:shadow-gold:hover { box-shadow: var(--shadow-gold); }
+  .hover\:-translate-y-1:hover { transform: translateY(-2px); }
+  tbody tr { transition: background-color 0.2s ease; }
+  tbody tr:hover { background-color: hsl(var(--muted) / 0.4) !important; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: hsl(var(--muted)); }
+::-webkit-scrollbar-thumb { background: hsl(var(--primary) / 0.4); border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: hsl(var(--primary) / 0.7); }
+
+/* Public editorial theme: intentionally isolated from the financial workspace. */
+.public-site {
+  --background: 180 8% 9%; --foreground: 0 0% 94%;
+  --card: 180 7% 12%; --card-foreground: 0 0% 94%;
+  --primary: 42 58% 62%; --primary-foreground: 180 12% 10%;
+  --secondary: 180 7% 16%; --secondary-foreground: 0 0% 94%;
+  --muted: 180 7% 16%; --muted-foreground: 180 6% 68%;
+  --border: 180 7% 24%; --input: 180 7% 24%; --ring: 42 58% 62%;
+  --sage: 162 37% 29%; --gold: 39 54% 43%; --radius: .375rem;
+  --gradient-warm: linear-gradient(hsl(var(--primary)), hsl(var(--primary)));
+  --gradient-soft: linear-gradient(hsl(var(--background)), hsl(var(--background)));
+  --gradient-sage: var(--gradient-warm); --gradient-gold: var(--gradient-warm);
+  --shadow-card: 0 2px 8px hsl(180 12% 13% / .04);
+  --shadow-warm: var(--shadow-card); --shadow-gold: var(--shadow-card);
+  font-family: 'Manrope', system-ui, sans-serif; letter-spacing: 0; color: hsl(var(--foreground));
+}
+.public-site h1, .public-site h2, .public-site h3, .public-site h4, .public-site .font-display { font-family: 'Fraunces', Georgia, serif; letter-spacing: 0; font-weight: 500; }
+.public-site .container-prose { max-width: 1200px; }
+.public-site [class*="rounded-3xl"], .public-site [class*="rounded-2xl"], .public-site [class*="rounded-["] { border-radius: 6px; }
+.public-site button, .public-site a[class*="rounded-full"] { border-radius: 4px; }
+/* Tela de login: mantém os cantos arredondados do cartão e dos botões em pílula. */
+.public-site.auth-screen [class*="rounded-["] { border-radius: 28px; }
+.public-site.auth-screen [class*="rounded-2xl"] { border-radius: 1rem; }
+.public-site.auth-screen button[class*="rounded-full"] { border-radius: 9999px; }
+.public-site main > section { scroll-margin-top: 110px; }
+.public-site main > section:not(.institutional-hero) { border-bottom: 1px solid hsl(var(--border) / .5); }
+.public-site .text-gradient-warm, .public-site .text-gradient-gold { background: none; -webkit-text-fill-color: currentColor; color: hsl(var(--primary)); }
+.public-site .institutional-hero { --foreground: 0 0% 100%; --muted-foreground: 180 9% 88%; --primary: 42 65% 70%; --primary-foreground: 180 14% 12%; --border: 180 9% 70%; --secondary: 180 12% 22%; background: hsl(180 14% 12%); }
+.hero-photo { left: auto; width: 55%; object-position: 50% 25%; }
+.hero-shade { background: linear-gradient(90deg, hsl(180 14% 8% / .96), hsl(180 14% 8% / .8) 38%, hsl(180 14% 8% / .08) 78%); }
+.hero-content { min-height: 620px; padding-top: 100px; padding-bottom: 90px; }
+.public-header { background: hsl(var(--card)); }
+.public-header nav a { white-space: nowrap; }
+.public-footer { --background: 180 14% 12%; --card: 180 12% 17%; --foreground: 0 0% 96%; --muted-foreground: 180 8% 73%; --primary: 42 65% 70%; --primary-foreground: 180 14% 12%; --border: 180 8% 30%; --input: 180 8% 30%; background: hsl(var(--background)); color: hsl(var(--foreground)); }
+.public-site .whatsapp-symbol { background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); }
+@media(max-width: 767px) {
+  .hero-photo { width: 100%; object-position: center top; }
+  .hero-shade { background: hsl(180 14% 8% / .72); }
+  .hero-content { min-height: 580px; padding-top: 60px; padding-bottom: 50px; }
+  .public-site .institutional-hero h1 { font-size: 42px; }
+  .public-site main > section { padding-top: 56px; padding-bottom: 56px; }
+  .public-site main > .institutional-hero { padding: 0; }
+}
+@media(prefers-reduced-motion: reduce) { .public-site *, .public-site *::before, .public-site *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+
+.public-site .institutional-hero a.border { background: transparent; color: hsl(var(--foreground)); }
+
+/* ===== Área do Cliente e login: paleta da educação financeira R&M — branco, azul-marinho e dourado ===== */
+.cliente-area {
+  --background: 40 30% 97%; --foreground: 222 47% 14%;
+  --card: 0 0% 100%; --card-foreground: 222 47% 14%;
+  --popover: 0 0% 100%; --popover-foreground: 222 47% 14%;
+  --primary: 221 62% 24%; --primary-foreground: 0 0% 100%;
+  --gold: 41 72% 47%; --gold-foreground: 222 47% 14%; --gold-soft: 42 85% 93%;
+  --secondary: 220 30% 95%; --secondary-foreground: 222 47% 14%;
+  --muted: 220 25% 95%; --muted-foreground: 220 12% 42%;
+  --accent: 42 85% 93%; --accent-foreground: 222 47% 14%;
+  --border: 220 20% 89%; --input: 220 20% 89%; --ring: 41 72% 47%;
+  --success: 152 55% 33%; --success-foreground: 0 0% 100%;
+  --destructive: 0 68% 48%; --destructive-foreground: 0 0% 100%;
+  --warning: 32 90% 44%;
+  --radius: 1rem;
+  font-family: 'Manrope', system-ui, sans-serif;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+.cliente-area .font-display, .cliente-area h1 { font-family: 'Fraunces', Georgia, serif; font-weight: 500; letter-spacing: -0.01em; }
+.cliente-area .text-gold { color: hsl(var(--gold)); }
+.cliente-area .bg-gold { background-color: hsl(var(--gold)); }
+.cliente-area .bg-gold-soft { background-color: hsl(var(--gold-soft)); }
+.cliente-area .border-gold { border-color: hsl(var(--gold)); }
+.cliente-area h2, .cliente-area h3, .cliente-area h4 { font-family: 'Manrope', system-ui, sans-serif; letter-spacing: 0; }
+.cliente-area h2.font-display, .cliente-area h3.font-display { font-family: 'Fraunces', Georgia, serif; }

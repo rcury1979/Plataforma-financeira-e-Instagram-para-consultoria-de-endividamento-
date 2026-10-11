@@ -1,0 +1,365 @@
+{
+  "version": 1,
+  "sdk_version": "0.26.1",
+  "path": "/functions/v1/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://tzbkkzoppxwrpspgzkkp.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "lovable-finance-hub",
+      "version": "0.1.0",
+      "title": "Lovable Finance Hub"
+    },
+    "tools": [
+      {
+        "name": "list_pf_transacoes",
+        "title": "Listar lançamentos pessoais (PF)",
+        "description": "Lista os lançamentos pessoais (receitas e despesas) do usuário autenticado, com filtros opcionais de período, tipo e categoria.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string",
+              "description": "Data inicial no formato YYYY-MM-DD."
+            },
+            "to": {
+              "type": "string",
+              "description": "Data final no formato YYYY-MM-DD."
+            },
+            "tipo": {
+              "type": "string",
+              "enum": [
+                "receita",
+                "despesa"
+              ],
+              "description": "Filtrar por tipo."
+            },
+            "categoria": {
+              "type": "string",
+              "description": "Filtrar por categoria exata."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200,
+              "default": 50,
+              "description": "Máximo de registros."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "create_pf_transacao",
+        "title": "Criar lançamento pessoal (PF)",
+        "description": "Cria um lançamento pessoal (receita ou despesa) para o usuário autenticado.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tipo": {
+              "type": "string",
+              "enum": [
+                "receita",
+                "despesa"
+              ],
+              "description": "Tipo do lançamento."
+            },
+            "valor": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Valor em reais."
+            },
+            "categoria": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Categoria, ex.: Luz, Supermercado, Salário."
+            },
+            "data": {
+              "type": "string",
+              "description": "Data do lançamento no formato YYYY-MM-DD."
+            },
+            "descricao": {
+              "type": "string",
+              "maxLength": 500,
+              "description": "Descrição livre."
+            },
+            "recorrente": {
+              "type": "boolean",
+              "default": false,
+              "description": "Marcar como recorrente."
+            }
+          },
+          "required": [
+            "tipo",
+            "valor",
+            "categoria",
+            "data"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_pf_dividas",
+        "title": "Listar dívidas pessoais",
+        "description": "Lista as dívidas pessoais do usuário autenticado, com credor, valores, parcelas e situação de quitação.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "incluir_quitadas": {
+              "type": "boolean",
+              "default": false,
+              "description": "Incluir dívidas já quitadas."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200,
+              "default": 50,
+              "description": "Máximo de registros."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_pf_metas",
+        "title": "Listar sonhos e metas pessoais",
+        "description": "Lista as metas/sonhos financeiros do usuário autenticado, com valor alvo, valor acumulado e prazo.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "incluir_concluidas": {
+              "type": "boolean",
+              "default": false,
+              "description": "Incluir metas já concluídas."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200,
+              "default": 50,
+              "description": "Máximo de registros."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_lancamentos",
+        "title": "Listar lançamentos da empresa (PJ)",
+        "description": "Lista os lançamentos financeiros empresariais do usuário autenticado, com filtros de período, tipo e categoria.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string",
+              "description": "Data inicial no formato YYYY-MM-DD."
+            },
+            "to": {
+              "type": "string",
+              "description": "Data final no formato YYYY-MM-DD."
+            },
+            "tipo": {
+              "type": "string",
+              "enum": [
+                "receita",
+                "despesa"
+              ],
+              "description": "Filtrar por tipo."
+            },
+            "categoria": {
+              "type": "string",
+              "description": "Filtrar por categoria exata."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200,
+              "default": 50,
+              "description": "Máximo de registros."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "create_lancamento",
+        "title": "Criar lançamento da empresa (PJ)",
+        "description": "Cria um lançamento financeiro empresarial (receita ou despesa) para o usuário autenticado.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tipo": {
+              "type": "string",
+              "enum": [
+                "receita",
+                "despesa"
+              ],
+              "description": "Tipo do lançamento."
+            },
+            "valor": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Valor em reais."
+            },
+            "descricao": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300,
+              "description": "Descrição do lançamento."
+            },
+            "data": {
+              "type": "string",
+              "description": "Data do lançamento no formato YYYY-MM-DD."
+            },
+            "categoria": {
+              "type": "string",
+              "description": "Categoria / plano de contas."
+            },
+            "forma_pagamento": {
+              "type": "string",
+              "description": "Forma de pagamento."
+            },
+            "planejado": {
+              "type": "boolean",
+              "default": false,
+              "description": "Marcar como planejado (previsto)."
+            },
+            "observacoes": {
+              "type": "string",
+              "maxLength": 500,
+              "description": "Observações."
+            }
+          },
+          "required": [
+            "tipo",
+            "valor",
+            "descricao",
+            "data"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_clientes",
+        "title": "Listar clientes",
+        "description": "Lista os clientes cadastrados pelo usuário autenticado, com busca opcional por nome.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "busca": {
+              "type": "string",
+              "description": "Texto para buscar no nome do cliente."
+            },
+            "incluir_arquivados": {
+              "type": "boolean",
+              "default": false,
+              "description": "Incluir clientes arquivados."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200,
+              "default": 50,
+              "description": "Máximo de registros."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "resumo_financeiro",
+        "title": "Resumo financeiro do período",
+        "description": "Calcula receitas, despesas, saldo e despesas por categoria em um período, para as finanças pessoais (PF) ou da empresa (PJ).",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "escopo": {
+              "type": "string",
+              "enum": [
+                "pf",
+                "pj"
+              ],
+              "description": "pf para finanças pessoais, pj para a empresa."
+            },
+            "from": {
+              "type": "string",
+              "description": "Data inicial no formato YYYY-MM-DD."
+            },
+            "to": {
+              "type": "string",
+              "description": "Data final no formato YYYY-MM-DD."
+            }
+          },
+          "required": [
+            "escopo",
+            "from",
+            "to"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
