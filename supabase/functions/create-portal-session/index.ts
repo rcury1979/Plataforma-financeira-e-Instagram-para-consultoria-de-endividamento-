@@ -1,51 +1,62 @@
+// Abre o portal do Stripe para o assinante trocar o cartão, ver faturas e (após a fidelidade) cancelar.
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { type StripeEnv, createStripeClient } from "../_shared/stripe.ts";
+import { createStripeClient, origemPermitida } from "../_shared/stripe.ts";
 
-const supabase = createClient(
-  Deno.env.get("SUPABASE_URL")!,
-  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-);
+const json = (body: unknown, status = 200) =>
+  new Response(JSON.stringify(body), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+
+/** Configuração do portal: durante a fidelidade, sem o botão de cancelar; depois, cancelamento no fim do mês pago.
+ *  Criada uma vez no Stripe e reaproveitada. */
+async function configPortal(stripe: ReturnType<typeof createStripeClient>, podeCancelar: boolean): Promise<string> {
+  const tipo = podeCancelar ? "com_cancelamento" : "sem_cancelamento";
+  const lista = await stripe.billingPortal.configurations.list({ limit: 100 });
+  const achou = lista.data.find((c) => c.metadata?.rm360 === tipo && c.active);
+  if (achou) return achou.id;
+  const nova = await stripe.billingPortal.configurations.create({
+    metadata: { rm360: tipo },
+    business_profile: { headline: "R&M Consultoria — sua assinatura do app R&M 360°" },
+    features: {
+      payment_method_update: { enabled: true },
+      invoice_history: { enabled: true },
+      customer_update: { enabled: true, allowed_updates: ["email", "address", "tax_id"] },
+      subscription_cancel: podeCancelar
+        ? { enabled: true, mode: "at_period_end", cancellation_reason: { enabled: true, options: ["too_expensive", "unused", "other"] } }
+        : { enabled: false },
+    },
+  });
+  return nova.id;
+}
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
-  if (req.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Method not allowed" }), {
-      status: 405,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
-  }
+  if (req.method !== "POST") return json({ error: "Method not allowed" }, 405);
   try {
-    const { returnUrl, environment } = await req.json() as { returnUrl?: string; environment: StripeEnv };
-    const authHeader = req.headers.get("Authorization");
-    const token = authHeader?.replace("Bearer ", "");
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
-    if (authError || !user) throw new Error("Unauthorized");
+    const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+    const token = req.headers.get("Authorization")?.replace("Bearer ", "");
+    const { data: { user } } = await admin.auth.getUser(token);
+    if (!user) return json({ error: "Faça login." }, 401);
 
-    const { data: sub } = await supabase
+    const { data: sub } = await admin
       .from("subscriptions")
-      .select("stripe_customer_id")
+      .select("stripe_customer_id, fidelidade_ate")
       .eq("user_id", user.id)
-      .eq("environment", environment)
       .order("created_at", { ascending: false })
       .limit(1)
       .maybeSingle();
-    if (!sub?.stripe_customer_id) throw new Error("Nenhuma assinatura encontrada");
+    if (!sub?.stripe_customer_id) return json({ error: "Nenhuma assinatura encontrada." }, 404);
 
-    const stripe = createStripeClient(environment);
+    const stripe = createStripeClient();
+    const naFidelidade = sub.fidelidade_ate && new Date(sub.fidelidade_ate).getTime() > Date.now();
     const portal = await stripe.billingPortal.sessions.create({
       customer: sub.stripe_customer_id as string,
-      ...(returnUrl && { return_url: returnUrl }),
+      return_url: `${origemPermitida(req.headers.get("origin"))}/cliente/configuracoes?aba=plano`,
+      locale: "pt-BR",
+      configuration: await configPortal(stripe, !naFidelidade),
     });
-    return new Response(JSON.stringify({ url: portal.url }), {
-      status: 200,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return json({ url: portal.url });
   } catch (e) {
     console.error("create-portal-session error:", e);
-    return new Response(JSON.stringify({ error: (e as Error).message }), {
-      status: 400,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return json({ error: "Não foi possível abrir o portal agora." }, 400);
   }
 });

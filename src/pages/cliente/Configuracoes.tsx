@@ -1,26 +1,33 @@
 /* Configurações: dados cadastrais, contas, cartões e categorias. */
 import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Camera, MessageCircle, User, UserRound } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { db, useUserId, useCadastros, PageHeader, Panel, PanelTitle, Pill, Field, inputCls } from "./_shared";
+import { db, useEducadorView, useUserId, useCadastros, PageHeader, Panel, PanelTitle, Pill, Field, inputCls } from "./_shared";
 import { ContasTab, CartoesTab, CategoriasTab } from "./_configuracoes-cadastros";
+import { AssinaturaTab } from "./_assinatura";
 
-type Aba = "dados" | "contas" | "cartoes" | "categorias";
+type Aba = "dados" | "contas" | "cartoes" | "categorias" | "plano";
 const ABAS: { id: Aba; label: string }[] = [
   { id: "dados", label: "Dados" }, { id: "contas", label: "Contas" }, { id: "cartoes", label: "Cartões" }, { id: "categorias", label: "Categorias" },
+  { id: "plano", label: "Plano" },
 ];
 
 export default function Configuracoes() {
   const userId = useUserId();
   const cad = useCadastros(userId);
-  const [aba, setAba] = useState<Aba>("dados");
+  const [params] = useSearchParams();
+  const [aba, setAba] = useState<Aba>(params.get("aba") === "plano" ? "plano" : "dados");
+  // A aba "Plano" é do próprio cliente; a educadora, vendo a ficha dele, não a enxerga.
+  const educador = useEducadorView();
+  const abas = educador ? ABAS.filter((a) => a.id !== "plano") : ABAS;
 
   return (
     <div>
-      <PageHeader title="Configurações" desc="Dados cadastrais, contas bancárias, cartões e categorias." />
-      <div role="tablist" className="mb-5 grid grid-cols-4 rounded-full border border-border bg-secondary p-1 text-[13px] sm:text-sm">
-        {ABAS.map((a) => (
+      <PageHeader title="Configurações" desc="Dados cadastrais, contas bancárias, cartões, categorias e seu plano." />
+      <div role="tablist" className={`mb-5 grid ${abas.length === 5 ? "grid-cols-5" : "grid-cols-4"} rounded-full border border-border bg-secondary p-1 text-[12px] sm:text-sm`}>
+        {abas.map((a) => (
           <button key={a.id} role="tab" type="button" aria-selected={aba === a.id} onClick={() => setAba(a.id)}
             className={`rounded-full py-2 transition ${aba === a.id ? "bg-card font-medium text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}>
             {a.label}
@@ -31,6 +38,7 @@ export default function Configuracoes() {
       {userId && aba === "contas" && <ContasTab userId={userId} contas={cad.contas} reload={cad.reload} />}
       {userId && aba === "cartoes" && <CartoesTab userId={userId} cartoes={cad.cartoes} contas={cad.contas} contaById={cad.contaById} reload={cad.reload} />}
       {userId && aba === "categorias" && <CategoriasTab userId={userId} categorias={cad.categorias} reload={cad.reload} />}
+      {!educador && aba === "plano" && <AssinaturaTab />}
     </div>
   );
 }

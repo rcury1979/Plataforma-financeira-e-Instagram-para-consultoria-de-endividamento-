@@ -1,0 +1,32 @@
+# Publica automaticamente as funções do servidor (Supabase Edge Functions) a cada mudança em supabase/functions.
+# Precisa de UM segredo no GitHub (Settings → Secrets and variables → Actions → New repository secret):
+#   SUPABASE_ACCESS_TOKEN  → gerado em https://supabase.com/dashboard/account/tokens
+name: Publicar funções do Supabase
+
+on:
+  push:
+    branches: [main]
+    paths: ["supabase/functions/**", "supabase/config.toml", ".github/workflows/supabase-funcoes.yml"]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      PROJECT_REF: fhgecznujymzmzopnpyd
+    steps:
+      - uses: actions/checkout@v4
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - name: Publicar funções de pagamento e assinatura
+        run: |
+          if [ -z "$SUPABASE_ACCESS_TOKEN" ]; then
+            echo "::error::Falta o segredo SUPABASE_ACCESS_TOKEN no GitHub (Settings → Secrets → Actions)."
+            exit 1
+          fi
+          for f in create-checkout payments-webhook create-portal-session chat-assistente registrar-lead-planilha; do
+            echo "→ $f"
+            supabase functions deploy "$f" --project-ref "$PROJECT_REF" --use-api
+          done

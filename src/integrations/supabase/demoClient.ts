@@ -295,6 +295,13 @@ export const demoSupabase: any = {
   from: (t: string) => new Query(t),
   async rpc(name: string, args: any) {
     if (name === "has_role") { const s = currentSession(); const u = Object.values(USERS).find((x) => x.id === (args?._user_id ?? s?.user?.id)); return { data: !!u?.admin && (args?._role === "admin" || args?._role === "educador"), error: null }; }
+    // Site de teste: os logins de teste têm acesso liberado (assinatura de demonstração).
+    if (name === "tem_acesso_app") return { data: !!currentSession(), error: null };
+    if (name === "minha_assinatura") {
+      const s = currentSession(); const u = Object.values(USERS).find((x) => x.id === s?.user?.id);
+      const fim = new Date(Date.now() + 23 * 86400000).toISOString();
+      return { data: s ? [{ tem_acesso: true, origem: u?.admin ? "equipe" : "assinatura", status: "active", contrato_meses: 12, fidelidade_ate: new Date(Date.now() + 300 * 86400000).toISOString(), proxima_cobranca: fim, cancela_no_fim: false }] : [], error: null };
+    }
     return { data: null, error: null };
   },
   functions: { async invoke(name: string) { return unavailable(`A função "${name}"`); } },

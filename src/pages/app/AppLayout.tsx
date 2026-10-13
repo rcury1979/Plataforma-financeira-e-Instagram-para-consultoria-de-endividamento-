@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { temAcessoApp } from "@/lib/acesso";
 import { ArrowLeft, Wallet, Users, CheckSquare, Menu, LogOut, Bell, WifiOff, Sun, Moon, Sparkles, Share, Plus, X, Download, PiggyBank, Target, TrendingDown, TrendingUp, Gauge } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useOnline } from "@/pwa/offline";
@@ -139,6 +140,8 @@ export default function AppLayout() {
       setTipoPessoa((prof?.tipo_pessoa as "PF" | "PJ") ?? "PJ");
       // Cliente Pessoa Física usa a nova Área do Cliente.
       if (prof?.tipo_pessoa === "PF" && role.data !== true) { navigate("/cliente", { replace: true }); return; }
+      // Sem assinatura, mentoria ou cortesia: vai para os planos.
+      if (role.data !== true && !(await temAcessoApp())) { navigate("/planos?acesso=1", { replace: true }); return; }
       if (p === "trial" && prof?.trial_ends_at) {
         const ms = new Date(prof.trial_ends_at).getTime() - Date.now();
         setTrialLeft(Math.max(0, Math.ceil(ms / (1000 * 60 * 60 * 24))));

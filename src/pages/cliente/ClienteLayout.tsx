@@ -6,6 +6,7 @@ import {
   CalendarClock, NotebookPen, Settings, LogOut, Menu, X, ArrowLeft, PanelLeftClose, PanelLeftOpen,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { temAcessoApp } from "@/lib/acesso";
 import { db, MesProvider } from "./_shared";
 import { CATEGORIAS_PADRAO } from "./_icons";
 
@@ -84,6 +85,8 @@ export default function ClienteLayout() {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) { navigate(`/app/auth?next=${encodeURIComponent(location.pathname)}`, { replace: true }); return; }
       const uid = session.user.id;
+      // Só entra quem tem acesso: assinatura, mentoria, cortesia ou equipe.
+      if (!(await temAcessoApp())) { if (alive) navigate("/planos?acesso=1", { replace: true }); return; }
       const { data: prof } = await db.from("profiles").select("full_name").eq("user_id", uid).maybeSingle();
       // Primeiro acesso: cria as categorias padrão.
       const { count } = await db.from("cli_categorias").select("id", { count: "exact", head: true }).eq("user_id", uid);

@@ -6,6 +6,7 @@ import { db } from "../cliente/_shared";
 export type ClienteCad = {
   id: string; user_id: string; responsavel_id: string | null; nome: string; email: string | null;
   telefone: string | null; tipo_pessoa: "PF" | "PJ"; arquivado: boolean; cliente_user_id: string | null; created_at: string;
+  acesso_app_incluso?: boolean;
 };
 
 /** Vagas de clientes por plano. */

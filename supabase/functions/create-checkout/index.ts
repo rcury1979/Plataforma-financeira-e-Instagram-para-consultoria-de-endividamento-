@@ -1,111 +1,77 @@
+// Abre o pagamento da assinatura do app R&M 360° (página segura do Stripe).
+// O usuário precisa estar logado: o id e o e-mail vêm do login, nunca do navegador.
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
-import { type StripeEnv, createStripeClient } from "../_shared/stripe.ts";
+import { createClient } from "npm:@supabase/supabase-js@2";
+import { createStripeClient, DIAS_GRATIS, origemPermitida, PLANOS, type PlanoId, stripeEnv } from "../_shared/stripe.ts";
 
-async function resolveOrCreateCustomer(
-  stripe: ReturnType<typeof createStripeClient>,
-  options: { email?: string; userId?: string },
-): Promise<string> {
-  if (options.userId && !/^[a-zA-Z0-9_-]+$/.test(options.userId)) throw new Error("Invalid userId");
-  if (options.userId) {
-    const found = await stripe.customers.search({
-      query: `metadata['userId']:'${options.userId}'`,
-      limit: 1,
-    });
-    if (found.data.length) return found.data[0].id;
-  }
-  if (options.email) {
-    const existing = await stripe.customers.list({ email: options.email, limit: 1 });
-    if (existing.data.length) {
-      const customer = existing.data[0];
-      if (options.userId && customer.metadata?.userId !== options.userId) {
-        await stripe.customers.update(customer.id, {
-          metadata: { ...customer.metadata, userId: options.userId },
-        });
-      }
-      return customer.id;
-    }
-  }
-  const created = await stripe.customers.create({
-    ...(options.email && { email: options.email }),
-    ...(options.userId && { metadata: { userId: options.userId } }),
-  });
-  return created.id;
-}
-
-async function createCheckoutSession(options: {
-  priceId: string;
-  quantity?: number;
-  customerEmail?: string;
-  userId?: string;
-  returnUrl: string;
-  environment: StripeEnv;
-}) {
-  if (!/^[a-zA-Z0-9_-]+$/.test(options.priceId)) throw new Error("Invalid priceId");
-  const stripe = createStripeClient(options.environment);
-
-  const prices = await stripe.prices.list({ lookup_keys: [options.priceId] });
-  if (!prices.data.length) throw new Error("Price not found");
-  const stripePrice = prices.data[0];
-  const isRecurring = stripePrice.type === "recurring";
-
-  const customerId = (options.customerEmail || options.userId)
-    ? await resolveOrCreateCustomer(stripe, {
-        email: options.customerEmail,
-        userId: options.userId,
-      })
-    : undefined;
-
-  let productDescription: string | undefined;
-  if (!isRecurring) {
-    const productId = typeof stripePrice.product === "string"
-      ? stripePrice.product
-      : stripePrice.product.id;
-    const product = await stripe.products.retrieve(productId);
-    productDescription = product.name;
-  }
-
-  const session = await stripe.checkout.sessions.create({
-    line_items: [{ price: stripePrice.id, quantity: options.quantity || 1 }],
-    mode: isRecurring ? "subscription" : "payment",
-    ui_mode: "embedded_page",
-    return_url: options.returnUrl,
-    ...(customerId && { customer: customerId }),
-    ...(!isRecurring && { payment_intent_data: { description: productDescription } }),
-    ...(options.userId && {
-      metadata: { userId: options.userId },
-      ...(isRecurring && {
-        subscription_data: {
-          // Prazo do contrato (6 ou 12 meses) vem da lookup key do preço, ex.: rm360_mensal_12m.
-          trial_period_days: 7, // 7 dias grátis antes da primeira cobrança
-          metadata: { userId: options.userId, contrato_meses: (options.priceId.match(/_(\d+)m$/)?.[1]) ?? "" },
-        },
-      }),
-    }),
-  });
-
-  return session.client_secret;
-}
+const json = (body: unknown, status = 200) =>
+  new Response(JSON.stringify(body), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
-  if (req.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Method not allowed" }), {
-      status: 405,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
-  }
+  if (req.method !== "POST") return json({ error: "Method not allowed" }, 405);
+
   try {
-    const body = await req.json();
-    const clientSecret = await createCheckoutSession(body);
-    return new Response(JSON.stringify({ clientSecret }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-      status: 200,
+    const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+    const token = req.headers.get("Authorization")?.replace("Bearer ", "");
+    const { data: { user } } = await admin.auth.getUser(token);
+    if (!user) return json({ error: "Faça login para assinar." }, 401);
+
+    const { plano } = (await req.json().catch(() => ({}))) as { plano?: string };
+    if (plano !== "6m" && plano !== "12m") return json({ error: "Plano inválido." }, 400);
+    const p = PLANOS[plano as PlanoId];
+
+    // Já assinante? Não deixa pagar em dobro.
+    const { data: subs } = await admin
+      .from("subscriptions")
+      .select("status, current_period_end, stripe_customer_id")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false });
+    const agora = Date.now();
+    const ativa = (subs ?? []).find((s) =>
+      ["active", "trialing", "past_due"].includes(s.status) &&
+      (!s.current_period_end || new Date(s.current_period_end).getTime() > agora));
+    if (ativa) return json({ error: "Você já tem uma assinatura ativa. Veja em Configurações → Minha assinatura." }, 409);
+
+    const stripe = createStripeClient();
+    let customerId = (subs ?? []).find((s) => s.stripe_customer_id)?.stripe_customer_id as string | undefined;
+    if (!customerId) {
+      const existing = await stripe.customers.list({ email: user.email ?? undefined, limit: 1 });
+      customerId = existing.data[0]?.id ??
+        (await stripe.customers.create({ email: user.email ?? undefined, metadata: { userId: user.id } })).id;
+    }
+
+    // Teste grátis só na primeira assinatura.
+    const primeiraVez = (subs ?? []).length === 0;
+    const origem = origemPermitida(req.headers.get("origin"));
+
+    const session = await stripe.checkout.sessions.create({
+      mode: "subscription",
+      customer: customerId,
+      locale: "pt-BR",
+      client_reference_id: user.id,
+      line_items: [{
+        quantity: 1,
+        price_data: {
+          currency: "brl",
+          unit_amount: p.centavos,
+          recurring: { interval: "month" },
+          product_data: { name: p.nome, metadata: { plano } },
+        },
+      }],
+      subscription_data: {
+        ...(primeiraVez && { trial_period_days: DIAS_GRATIS }),
+        metadata: { userId: user.id, plano, contrato_meses: String(p.meses) },
+      },
+      metadata: { userId: user.id, plano },
+      allow_promotion_codes: true,
+      success_url: `${origem}/pagamento/sucesso?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${origem}/planos?cancelado=1`,
     });
+
+    return json({ url: session.url, ambiente: stripeEnv() });
   } catch (e) {
     console.error("create-checkout error:", e);
-    return new Response(JSON.stringify({ error: (e as Error).message }), {
-      status: 400,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return json({ error: "Não foi possível abrir o pagamento agora. Tente de novo em instantes." }, 400);
   }
 });

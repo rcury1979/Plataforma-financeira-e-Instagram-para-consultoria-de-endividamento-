@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { db, EmptyState, Field, inputCls, PageHeader, Pill, rangeAnoMes, anoMesOf } from "../cliente/_shared";
 import {
-  avatarCls, iniciais, limiteDoPlano, linkConvite, mensagemConvite, useEducadora, whatsappUrl, type ClienteCad,
+  avatarCls, iniciais, linkConvite, mensagemConvite, useEducadora, whatsappUrl, type ClienteCad,
 } from "./_clientes-utils";
 
 type Aba = "ativos" | "arquivados";
@@ -55,11 +55,9 @@ export default function EduClientes() {
 
   const ativos = clientes.filter((c) => !c.arquivado);
   const arquivados = clientes.filter((c) => c.arquivado);
-  const vagas = limiteDoPlano(me?.plano);
+  const vagas = Number.POSITIVE_INFINITY; // área exclusiva da R&M: sem limite de clientes
   const usadas = ativos.length;
   const semVagas = usadas >= vagas;
-  const limiteImport = vagas * 3;
-  const limiteAnalises = vagas * 3;
   // TODO: contar as análises geradas pelos clientes no mês quando a tela de análises registrar o uso.
   const analises = 0;
 
@@ -91,6 +89,15 @@ export default function EduClientes() {
     load();
   }
 
+  async function alternarApp(c: ClienteCad) {
+    if (!me) return;
+    const novo = c.acesso_app_incluso === false;
+    const { error } = await db.from("clientes").update({ acesso_app_incluso: novo }).eq("id", c.id).eq("user_id", me.id);
+    if (error) return toast.error("Não foi possível alterar o acesso.");
+    toast.success(novo ? `App liberado para ${c.nome} (incluso na mentoria).` : `${c.nome} agora precisa de assinatura para usar o app.`);
+    void load();
+  }
+
   function pedirRestaurar(c: ClienteCad) {
     if (semVagas) return toast.error("Suas vagas estão todas em uso. Arquive alguém ou aumente o plano para restaurar.");
     setArquivando(c);
@@ -107,16 +114,17 @@ export default function EduClientes() {
         }
       />
 
-      {/* uso do plano */}
-      <div className="mb-6 space-y-3">
-        <BarraUso
-          label={`${usadas} de ${vagas} vagas utilizadas`}
-          usado={usadas}
-          total={vagas}
-          extra={<Link to="/planos" className="text-xs font-medium text-primary underline-offset-2 hover:underline">Aumentar plano</Link>}
-        />
-        <BarraUso label={`${importacoes} de ${limiteImport} importações usadas este mês`} usado={importacoes} total={limiteImport} />
-        <BarraUso label={`${analises} de ${limiteAnalises} análises usadas este mês`} usado={analises} total={limiteAnalises} />
+      {/* resumo + regra de acesso ao app */}
+      <div className="mb-6 rounded-2xl border border-border bg-card p-4 text-sm">
+        <p className="text-foreground">
+          <b>{ativos.length}</b> {ativos.length === 1 ? "cliente ativo" : "clientes ativos"} ·{" "}
+          <b>{ativos.filter((c) => c.cliente_user_id && c.acesso_app_incluso !== false).length}</b> com o app incluso na mentoria
+          {importacoes + analises > 0 && <> · {importacoes} importações e {analises} análises este mês</>}
+        </p>
+        <p className="mt-1 text-xs text-muted-foreground">
+          Cliente da mentoria que aceitou o convite usa o app sem pagar assinatura. Para cobrar a assinatura de alguém,
+          toque em <b>App incluso</b> no cartão dele. Arquivar o cliente também tira o acesso incluso.
+        </p>
       </div>
 
       {/* abas + busca */}
@@ -161,6 +169,7 @@ export default function EduClientes() {
                 c={c}
                 onOpen={() => abrir(c)}
                 onArquivar={() => (c.arquivado ? pedirRestaurar(c) : setArquivando(c))}
+                onAlternarApp={() => alternarApp(c)}
               />
             </li>
           ))}
@@ -203,29 +212,14 @@ export default function EduClientes() {
   );
 }
 
-function BarraUso({ label, usado, total, extra }: { label: string; usado: number; total: number; extra?: React.ReactNode }) {
-  const pct = total > 0 ? Math.min(100, (usado / total) * 100) : 0;
-  const cor = pct >= 100 ? "bg-destructive" : pct >= 80 ? "bg-gold" : "bg-primary";
-  return (
-    <div>
-      <div className="mb-1.5 flex items-center justify-between gap-2">
-        <span className="text-sm text-muted-foreground">{label}</span>
-        {extra}
-      </div>
-      <div className="h-1.5 w-full overflow-hidden rounded-full bg-secondary">
-        <div className={`h-full rounded-full ${cor} transition-all`} style={{ width: `${pct}%` }} />
-      </div>
-    </div>
-  );
-}
-
 function Selo({ c }: { c: ClienteCad }) {
   if (c.arquivado) return <span className="rounded-full bg-secondary px-2 py-0.5 text-[11px] font-semibold text-muted-foreground">Arquivado</span>;
   if (c.cliente_user_id) return <span className="rounded-full bg-success/10 px-2 py-0.5 text-[11px] font-semibold text-success">Ativo</span>;
   return <span className="rounded-full bg-gold-soft px-2 py-0.5 text-[11px] font-semibold text-gold">Convite pendente</span>;
 }
 
-function ClienteCard({ c, onOpen, onArquivar }: { c: ClienteCad; onOpen: () => void; onArquivar: () => void }) {
+function ClienteCard({ c, onOpen, onArquivar, onAlternarApp }: { c: ClienteCad; onOpen: () => void; onArquivar: () => void; onAlternarApp: () => void }) {
+  const incluso = c.acesso_app_incluso !== false;
   return (
     <div className="flex items-center gap-3 rounded-2xl border border-border bg-card p-3 shadow-[0_1px_3px_hsl(222_47%_14%/0.06)] transition hover:border-primary/30 sm:gap-4 sm:p-4">
       <button type="button" onClick={onOpen} className="flex min-w-0 flex-1 items-center gap-3 text-left sm:gap-4" aria-label={`Abrir ${c.nome}`}>
@@ -242,6 +236,16 @@ function ClienteCard({ c, onOpen, onArquivar }: { c: ClienteCad; onOpen: () => v
         </span>
       </button>
       <div className="flex shrink-0 items-center gap-1">
+        {!c.arquivado && c.cliente_user_id && (
+          <button
+            type="button"
+            onClick={onAlternarApp}
+            title={incluso ? "App incluso na mentoria — toque para passar a cobrar assinatura" : "Cliente paga assinatura — toque para incluir o app na mentoria"}
+            className={`hidden rounded-full px-2.5 py-1 text-[11px] font-semibold sm:inline-flex ${incluso ? "bg-gold-soft text-gold" : "bg-secondary text-muted-foreground"}`}
+          >
+            {incluso ? "App incluso" : "Assinatura"}
+          </button>
+        )}
         <button
           type="button"
           onClick={onArquivar}
