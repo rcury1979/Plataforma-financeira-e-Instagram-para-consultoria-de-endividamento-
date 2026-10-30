@@ -35,6 +35,7 @@ export default function SiteFooter() {
           <ul className="space-y-2.5 text-sm">
             <li><Link to="/cursos" className="hover:text-primary transition">Cursos online</Link></li>
             <li><Link to="/palestras" className="hover:text-primary transition">Palestras</Link></li>
+            <li><Link to="/treinamento" className="hover:text-primary transition">Treinamento</Link></li>
             <li><Link to="/planilha-gratis" className="hover:text-primary transition">Planilha grátis</Link></li>
             <li><Link to="/quero-ajuda" className="hover:text-primary transition">Quero ser ajudado</Link></li>
             <li><Link to="/agendar" className="hover:text-primary transition">Agendar conversa</Link></li>

@@ -7,6 +7,7 @@ const links = [
   { to: "/", label: "Início" },
   { to: "/cursos", label: "Cursos" },
   { to: "/palestras", label: "Palestras" },
+  { to: "/treinamento", label: "Treinamento" },
   { to: "/planilha-gratis", label: "Planilha Grátis" },
   { to: "/diagnostico", label: "Diagnóstico Grátis" },
   { to: "/videos", label: "Vídeos" },
