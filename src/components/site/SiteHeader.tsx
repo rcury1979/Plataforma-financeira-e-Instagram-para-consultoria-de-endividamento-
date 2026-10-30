@@ -25,7 +25,7 @@ export default function SiteHeader() {
           <span className="font-display text-2xl text-primary border border-primary px-2 py-1">R&M</span>
           <span className="flex flex-col leading-tight">
             <span className="font-display text-lg font-semibold text-foreground">RM Consultoria</span>
-            <span className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Educação & Mentoria · 360°</span>
+            <span className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Consultoria Financeira · 360°</span>
           </span>
         </Link>
 

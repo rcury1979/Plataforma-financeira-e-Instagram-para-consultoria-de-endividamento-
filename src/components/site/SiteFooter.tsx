@@ -27,7 +27,7 @@ export default function SiteFooter() {
           <p className="text-sm text-muted-foreground leading-relaxed">
             Educação financeira humana e prática para quem quer recomeçar — pessoas, famílias, igrejas e empresas.
           </p>
-          <p className="text-xs text-muted-foreground">CNPJ • rmconsultoria.finance</p>
+          <p className="text-xs text-muted-foreground">rmconsultoriaeducation.com</p>
         </div>
 
         <div>

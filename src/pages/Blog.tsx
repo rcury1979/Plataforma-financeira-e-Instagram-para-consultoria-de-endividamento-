@@ -6,7 +6,7 @@ import { Calculator, BookOpen, ArrowRight, Clock } from "lucide-react";
 const artigos = [
   { titulo: "Como sair das dívidas em 12 meses (passo a passo)", categoria: "Endividamento", tempo: "8 min", resumo: "Um guia completo, sem fórmulas mágicas, para você quitar tudo com paz." },
   { titulo: "5 conversas que todo casal precisa ter sobre dinheiro", categoria: "Família", tempo: "6 min", resumo: "O que ninguém te ensinou no relacionamento, mas faz toda a diferença." },
-  { titulo: "Pequena empresa em crise: por onde começar?", categoria: "Empresarial", tempo: "10 min", resumo: "Diagnóstico, renegociação e plano de 90 dias para PMEs." },
+  { titulo: "Pequena empresa em crise: por onde começar?", categoria: "Empresarial", tempo: "10 min", resumo: "Diagnóstico, fluxo de caixa e plano de capital de giro para pequenas empresas." },
   { titulo: "Reserva de emergência: quanto guardar de verdade?", categoria: "Planejamento", tempo: "5 min", resumo: "Esqueça as regras genéricas. O número certo depende de você." },
   { titulo: "Como falar de dinheiro na sua igreja sem culpa", categoria: "Igrejas", tempo: "7 min", resumo: "Uma abordagem pastoral e prática para tratar finanças nas comunidades." },
   { titulo: "MEI: separando vida pessoal e profissional", categoria: "MEI", tempo: "6 min", resumo: "O erro nº1 dos autônomos e como corrigir esta semana." },

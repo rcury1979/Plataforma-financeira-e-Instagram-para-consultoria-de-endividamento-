@@ -24,7 +24,7 @@ const cursos = [
     desc: "Reestruturação financeira para pequenos negócios em crise.",
     duracao: "12 semanas",
     nivel: "Intermediário",
-    modulos: ["Caixa diário", "Renegociação fornecedores", "Precificação", "Plano de 90 dias"],
+    modulos: ["Caixa diário", "Plano de capital de giro", "Precificação", "Fluxo de caixa"],
   },
   {
     titulo: "Liberdade do MEI",
