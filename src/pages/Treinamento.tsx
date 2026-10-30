@@ -1,11 +1,14 @@
 /* Treinamento — palestra "Minha história: da origem à autonomia", de Marta Cury. */
 import { Link } from "react-router-dom";
-import { Download, Instagram, MessageCircle, ArrowRight } from "lucide-react";
+import { useState } from "react";
+import { Download, Instagram, MessageCircle, ArrowRight, Presentation } from "lucide-react";
+import ApresentacaoSlides from "@/components/site/ApresentacaoSlides";
 import SiteLayout from "@/components/site/SiteLayout";
 import { Button } from "@/components/ui/button";
 
 const img = (f: string) => `${import.meta.env.BASE_URL}treinamento/${f}`;
 const PDF = img("minha-historia-marta-cury.pdf");
+const SLIDES = Array.from({ length: 11 }, (_, n) => img(`slides/${String(n + 1).padStart(2, "0")}.jpg`));
 const WHATSAPP = "https://wa.me/5521986000039";
 const INSTAGRAM = "https://www.instagram.com/marta_curyy/";
 
@@ -18,6 +21,7 @@ const Foto = ({ src, alt, className = "" }: { src: string; alt: string; classNam
 );
 
 export default function Treinamento() {
+  const [apresentando, setApresentando] = useState(false);
   return (
     <SiteLayout>
       {/* Capa */}
@@ -31,9 +35,12 @@ export default function Treinamento() {
             <p className="text-lg font-semibold">Marta Cury</p>
             <p className="text-white/70">Empreendedora · Consultora Financeira</p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button asChild size="lg" className="gradient-gold text-gold-foreground">
+              <Button size="lg" className="gradient-gold text-gold-foreground" onClick={() => setApresentando(true)}>
+                <Presentation className="mr-2 h-4 w-4" /> Ver como apresentação
+              </Button>
+              <Button asChild size="lg" variant="outline" className="border-white/40 bg-transparent text-white hover:bg-white/10 hover:text-white">
                 <a href={PDF} download>
-                  <Download className="mr-2 h-4 w-4" /> Baixar apresentação (PDF)
+                  <Download className="mr-2 h-4 w-4" /> Baixar PDF
                 </a>
               </Button>
               <Button asChild size="lg" variant="outline" className="border-white/40 bg-transparent text-white hover:bg-white/10 hover:text-white">
@@ -42,6 +49,19 @@ export default function Treinamento() {
             </div>
           </div>
           <Foto src="marta-capa.jpg" alt="Marta Cury" className="max-h-[560px] object-top" />
+        </div>
+      </section>
+
+      {/* Apresentação */}
+      <section id="apresentacao" className="bg-secondary/50 py-12 lg:py-16">
+        <div className="container-prose max-w-5xl">
+          <div className="mb-6 text-center">
+            <Rotulo>Apresentação</Rotulo>
+            <h2 className="mt-2 font-display text-3xl text-foreground">Veja os slides da palestra</h2>
+            <p className="mt-2 text-sm text-muted-foreground">Use as setas, deslize no celular ou toque em tela cheia.</p>
+          </div>
+          <ApresentacaoSlides slides={SLIDES} titulo="Minha história — Marta Cury" aberto={apresentando}
+            onAbrir={() => setApresentando(true)} onFechar={() => setApresentando(false)} />
         </div>
       </section>
 
