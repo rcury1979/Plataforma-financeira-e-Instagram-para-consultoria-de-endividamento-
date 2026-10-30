@@ -11,6 +11,7 @@ import Home from "./pages/Home";
 const Cursos = lazy(() => import("./pages/Cursos"));
 const Palestras = lazy(() => import("./pages/Palestras"));
 const Treinamento = lazy(() => import("./pages/Treinamento"));
+const Ebooks = lazy(() => import("./pages/Ebooks"));
 const Videos = lazy(() => import("./pages/Videos"));
 const Diagnostico = lazy(() => import("./pages/Diagnostico"));
 const Blog = lazy(() => import("./pages/Blog"));
@@ -105,6 +106,7 @@ const App = () => (
           <Route path="/cursos" element={<Cursos />} />
           <Route path="/palestras" element={<Palestras />} />
           <Route path="/treinamento" element={<Treinamento />} />
+          <Route path="/ebooks" element={<Ebooks />} />
           <Route path="/diagnostico" element={<Diagnostico />} />
           <Route path="/videos" element={<Videos />} />
           <Route path="/blog" element={<Blog />} />
