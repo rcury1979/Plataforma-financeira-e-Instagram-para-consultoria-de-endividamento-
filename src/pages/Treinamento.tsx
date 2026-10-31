@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 
 const img = (f: string) => `${import.meta.env.BASE_URL}treinamento/${f}`;
 const PDF = img("minha-historia-marta-cury.pdf");
-const SLIDES = Array.from({ length: 11 }, (_, n) => img(`slides/${String(n + 1).padStart(2, "0")}.jpg`));
+const SLIDES = Array.from({ length: 14 }, (_, n) => img(`slides/${String(n + 1).padStart(2, "0")}.jpg`));
 const WHATSAPP = "https://wa.me/5521986000039";
 const INSTAGRAM = "https://www.instagram.com/marta_curyy/";
 
@@ -124,9 +124,26 @@ export default function Treinamento() {
           <span className="text-xs font-semibold uppercase tracking-[0.25em]">A virada</span>
           <h2 className="mt-3 font-display text-4xl lg:text-6xl">Em 2023, decidi recomeçar</h2>
           <p className="mt-4 text-lg">Deixei o banco para investir na minha autonomia e construir um trabalho alinhado aos meus valores.</p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            {["Mais liberdade", "Mais propósito", "Mais independência"].map((t) => (
-              <span key={t} className="rounded-full bg-[hsl(222_47%_14%)] px-6 py-3 font-semibold text-white">{t}</span>
+          <div className="mt-8 flex flex-wrap items-center gap-2 text-sm font-semibold">
+            {["20+ anos no banco", "Coragem de recomeçar", "Estudo, método e fé", "R&M Consultoria"].map((t, i, a) => (
+              <span key={t} className="flex items-center gap-2">
+                <span className={`rounded-lg border border-[hsl(222_47%_14%)] px-4 py-2 ${i === a.length - 1 ? "bg-[hsl(222_47%_14%)] text-white" : "bg-white/20"}`}>{t}</span>
+                {i < a.length - 1 && <ArrowRight className="h-4 w-4" />}
+              </span>
+            ))}
+          </div>
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            {[
+              ["Mais liberdade", "Trocar o crachá pelo direito de escolher meu tempo, meus clientes e o tamanho dos meus sonhos.", "Liberdade não é sair de algo — é ir em direção a quem você nasceu para ser."],
+              ["Mais propósito", "Usar 20 anos de experiência a favor de quem mais precisa: as famílias.", "Cada dívida quitada é uma casa que volta a ter paz."],
+              ["Mais independência", "Construir algo meu, com as minhas regras e os meus valores.", "Segurança de verdade não vem do emprego — vem do que você sabe e de quem você se torna."],
+            ].map(([t, d, q], i) => (
+              <div key={t} className="rounded-2xl bg-[hsl(222_47%_14%)] p-6 text-white">
+                <span className="grid h-8 w-8 place-items-center rounded-full bg-gold text-sm font-bold text-[hsl(222_47%_14%)]">{i + 1}</span>
+                <h3 className="mt-3 font-display text-2xl text-gold">{t}</h3>
+                <p className="mt-2 text-white/80">{d}</p>
+                <p className="mt-3 border-l-2 border-gold pl-3 font-display italic">{q}</p>
+              </div>
             ))}
           </div>
         </div>
