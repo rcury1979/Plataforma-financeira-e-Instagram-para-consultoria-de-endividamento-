@@ -44,7 +44,7 @@ export default function Sobre() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
               { icon: Heart, t: "Acolhimento", d: "Sem julgamento. Toda história merece um recomeço." },
-              { icon: Award, t: "Excelência", d: "Método GCPM testado em mais de 1.200 atendimentos." },
+              { icon: Award, t: "Excelência", d: "Método GCPM, construído em mais de 20 anos no mercado financeiro." },
               { icon: Users, t: "Comunidade", d: "Você não caminha sozinho — somos uma rede." },
               { icon: Sparkles, t: "Esperança", d: "Liberdade financeira é fruto de hábitos diários." },
             ].map((v) => (

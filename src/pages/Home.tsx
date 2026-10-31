@@ -13,13 +13,6 @@ import heroImg from "@/assets/fotos/martiniana-corda-samambaia.jpg";
 import palestraImg from "@/assets/palestra-igreja.jpg";
 import martinianaImg from "@/assets/fotos/martiniana-blazer-retrato.jpg";
 
-const stats = [
-  { value: "+1.200", label: "Pessoas atendidas" },
-  { value: "+80", label: "Palestras realizadas" },
-  { value: "20 anos", label: "De experiência" },
-  { value: "94%", label: "Saem das dívidas em 12 meses" },
-];
-
 const personas = [
   { icon: Heart, title: "Pessoas endividadas", desc: "Recomeçar com um plano simples, humano e sem julgamentos." },
   { icon: Users, title: "Famílias", desc: "Reorganizar o orçamento e parar de brigar por dinheiro em casa." },
@@ -500,7 +493,7 @@ export default function Index() {
               { q: "Vocês atendem empresas em crise?", a: "Sim. O programa de Reestruturação Empresarial faz diagnóstico de caixa, plano de capital de giro e um plano de ação para recolocar a empresa em rota de recuperação — com indicadores semanais." },
               { q: "Preciso pagar para fazer o diagnóstico financeiro?", a: "Não. O diagnóstico é 100% gratuito, leva menos de 5 minutos e já entrega um plano inicial personalizado. É a melhor forma de entender por onde começar." },
               { q: "Como uso o aplicativo R&M 360° no celular?", a: "Basta abrir rmconsultoriaeducation.com/app no navegador do celular e tocar em 'Adicionar à tela inicial'. Não passa por Google Play nem Apple Store e sincroniza com o sistema web em tempo real." },
-              { q: "Em quanto tempo eu vejo resultado?", a: "94% das pessoas saem das dívidas em até 12 meses seguindo o método. A dívida média cai 68% já nos primeiros ciclos — mas o mais importante é reconquistar a paz financeira desde a primeira semana." },
+              { q: "Em quanto tempo eu vejo resultado?", a: "Depende da situação de cada família ou empresa. Com o diagnóstico, montamos um plano com prazos realistas — e a clareza sobre o dinheiro costuma chegar já nas primeiras semanas." },
             ].map((item, i) => (
               <AccordionItem key={i} value={`item-${i}`} className="border-border">
                 <AccordionTrigger className="text-left font-display text-base lg:text-lg text-foreground hover:text-primary">
