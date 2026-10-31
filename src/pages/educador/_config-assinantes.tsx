@@ -73,7 +73,7 @@ export function Assinantes() {
   if (loading) return <p className="text-sm text-muted-foreground">Carregando…</p>;
 
   const ativos = subs.filter((s) => ["active", "trialing", "past_due"].includes(s.status));
-  const receitaMes = ativos.filter((s) => s.status === "active").reduce((t, s) => t + (s.contrato_meses === 6 ? 25.99 : 21.99), 0);
+  const receitaMes = ativos.filter((s) => s.status === "active").reduce((t, s) => t + (s.contrato_meses === 6 ? 39.9 : 29.9), 0);
 
   return (
     <div className="grid gap-5 lg:grid-cols-2">

@@ -353,8 +353,8 @@ export default function Index() {
           </div>
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {[
-              { id: "6m", nome: "Contrato de 6 meses", preco: "R$ 25,99", obs: "6 mensalidades · total de R$ 155,94" },
-              { id: "12m", nome: "Contrato de 12 meses", preco: "R$ 21,99", obs: "12 mensalidades · economia de R$ 48 no ano", destaque: true },
+              { id: "6m", nome: "Contrato de 6 meses", preco: "R$ 39,90", obs: "6 mensalidades · total de R$ 239,40" },
+              { id: "12m", nome: "Contrato de 12 meses", preco: "R$ 29,90", obs: "12 mensalidades · economia de R$ 120 no ano", destaque: true },
             ].map((p) => (
               <div key={p.id} className={`relative rounded-[2rem] border p-8 bg-card flex flex-col ${p.destaque ? "border-primary shadow-warm" : "border-border"}`}>
                 {p.destaque && <span className="absolute -top-3 left-8 rounded-full gradient-warm px-3 py-1 text-xs font-semibold text-primary-foreground">Mais escolhido</span>}
@@ -362,7 +362,7 @@ export default function Index() {
                 <p className="mt-4"><span className="font-display text-5xl text-foreground">{p.preco}</span><span className="text-muted-foreground">/mês</span></p>
                 <p className="mt-2 text-sm text-muted-foreground">{p.obs}</p>
                 <ul className="mt-6 space-y-2 text-sm text-foreground/85 flex-1">
-                  {["7 dias grátis para testar", "Área do cliente completa", "Celular e computador"].map((t) => (
+                  {["7 dias grátis para testar", "Open Finance incluso", "Área do cliente completa", "Celular e computador"].map((t) => (
                     <li key={t} className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" />{t}</li>
                   ))}
                 </ul>

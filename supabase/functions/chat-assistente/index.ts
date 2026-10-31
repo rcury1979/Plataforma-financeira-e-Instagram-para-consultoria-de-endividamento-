@@ -22,7 +22,7 @@ SERVIÇOS OFERECIDOS:
 7. **App R&M 360°** com o **Método GCPM** (Gerar, Cuidar, Proteger e Multiplicar): extrato, limites, dívidas, patrimônio, metas e acompanhamento com a educadora — página /planos.
 
 ASSINATURA DO APP R&M 360°:
-- Contrato de 6 meses: R$ 25,99/mês. Contrato de 12 meses: R$ 21,99/mês. Os dois começam com 7 dias grátis — página /planos.
+- Contrato de 6 meses: R$ 39,90/mês. Contrato de 12 meses: R$ 29,90/mês. Os dois incluem Open Finance. Os dois começam com 7 dias grátis — página /planos.
 
 REGRAS IMPORTANTES:
 - Se a pessoa parecer em situação difícil (dívidas, desespero, "não sei o que fazer"), acolha primeiro. Diga que ela não está sozinha e sugira o WhatsApp da Marta Cury ou o Diagnóstico Gratuito.

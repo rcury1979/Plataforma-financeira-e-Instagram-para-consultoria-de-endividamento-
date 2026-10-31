@@ -23,7 +23,7 @@ const REGRAS: Regra[] = [
     chaves: ["plano", "preço", "preco", "valor", "assinatura", "quanto custa", "plataforma", "app", "aplicativo", "sistema"],
     resposta:
       "O **R&M 360°** é o app da RM Consultoria, com o **Método GCPM** (Gerar, Cuidar, Proteger e Multiplicar): extrato, limites, dívidas, patrimônio, metas e acompanhamento com a educadora.\n\n" +
-      "A assinatura começa com **7 dias grátis**: **R$ 25,99/mês** no contrato de 6 meses ou **R$ 21,99/mês** no de 12 meses — veja em **[Planos](/planos)**. Se for cliente da mentoria, o acesso vem junto — pergunte no **[WhatsApp](" + WHATS + ")**.",
+      "A assinatura começa com **7 dias grátis**: **R$ 39,90/mês** no contrato de 6 meses ou **R$ 29,90/mês** no de 12 meses, com Open Finance incluso — veja em **[Planos](/planos)**. Se for cliente da mentoria, o acesso vem junto — pergunte no **[WhatsApp](" + WHATS + ")**.",
   },
   {
     chaves: ["planilha", "baixar", "download", "orçamento", "orcamento"],

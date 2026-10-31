@@ -26,8 +26,8 @@ export function createStripeClient(): Stripe {
 
 /** Planos do app R&M 360° — valores combinados (centavos de real). */
 export const PLANOS = {
-  "6m": { meses: 6, centavos: 2599, nome: "R&M 360° — contrato de 6 meses" },
-  "12m": { meses: 12, centavos: 2199, nome: "R&M 360° — contrato de 12 meses" },
+  "6m": { meses: 6, centavos: 3990, nome: "R&M 360° — contrato de 6 meses" },
+  "12m": { meses: 12, centavos: 2990, nome: "R&M 360° — contrato de 12 meses" },
 } as const;
 export type PlanoId = keyof typeof PLANOS;
 export const DIAS_GRATIS = 7;

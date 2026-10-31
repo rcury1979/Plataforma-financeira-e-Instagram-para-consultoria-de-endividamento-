@@ -15,10 +15,11 @@ type Plano = {
   descricao: string;
 };
 
-// Combinado: contrato de 6 meses a R$ 25,99/mês ou de 12 meses a R$ 21,99/mês, com 7 dias grátis.
+// Combinado: contrato de 6 meses a R$ 39,90/mês ou de 12 meses a R$ 29,90/mês, com 7 dias grátis.
 // Os valores cobrados ficam no servidor (função create-checkout); aqui é só a vitrine.
 const RECURSOS = [
   "Área do cliente completa com o Método GCPM",
+  "Open Finance: suas contas e cartões conectados ao app",
   "Extrato com contas e cartões, limites por categoria e análises",
   "Dívidas, patrimônio e planejamento de futuro",
   "Importação de extrato e fatura",
@@ -30,15 +31,15 @@ const PLANOS: Plano[] = [
   {
     id: "6m",
     nome: "Contrato de 6 meses",
-    preco: "R$ 25,99",
-    descricao: "6 mensalidades de R$ 25,99 (total de R$ 155,94). Depois, renova mês a mês pelo mesmo valor.",
+    preco: "R$ 39,90",
+    descricao: "6 mensalidades de R$ 39,90 (total de R$ 239,40). Depois, renova mês a mês pelo mesmo valor.",
   },
   {
     id: "12m",
     nome: "Contrato de 12 meses",
-    preco: "R$ 21,99",
+    preco: "R$ 29,90",
     destaque: true,
-    descricao: "12 mensalidades de R$ 21,99 (total de R$ 263,88). Economia de R$ 48 no ano em relação ao plano de 6 meses.",
+    descricao: "12 mensalidades de R$ 29,90 (total de R$ 358,80). Economia de R$ 120 no ano em relação ao plano de 6 meses.",
   },
 ];
 
@@ -93,7 +94,7 @@ export default function Planos() {
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold mb-3">Assine o app R&amp;M 360°</h1>
           <p className="text-muted-foreground text-lg">
-            A partir de R$ 21,99 por mês. Comece com 7 dias grátis — a primeira cobrança só acontece depois do teste.
+            A partir de R$ 29,90 por mês. Comece com 7 dias grátis — a primeira cobrança só acontece depois do teste.
           </p>
         </div>
 
