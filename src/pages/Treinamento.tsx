@@ -80,16 +80,16 @@ export default function Treinamento() {
             <p className="mt-2">Aponte a câmera do celular para o QR Code, escolha seu bonequinho e preencha seus dados. O resultado sai ao vivo no telão. 🍀</p>
             <div className="mt-6 flex flex-wrap justify-center gap-3 md:justify-start">
               <Button asChild size="lg" className="rounded-full bg-[hsl(222_47%_14%)] px-8 text-white hover:bg-[hsl(222_47%_20%)]">
-                <Link to="/treinamento/sorteio"><Smartphone className="mr-2 h-4 w-4" /> Participar do sorteio</Link>
+                <Link to="/sorteio#cadastro"><Smartphone className="mr-2 h-4 w-4" /> Participar do sorteio</Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="rounded-full border-[hsl(222_47%_14%)] bg-transparent px-8 text-[hsl(222_47%_14%)] hover:bg-white/30">
-                <Link to="/treinamento/sorteio/painel"><Trophy className="mr-2 h-4 w-4" /> Sortear e ver a vencedora</Link>
+                <Link to="/sorteio#roleta"><Trophy className="mr-2 h-4 w-4" /> Girar a roleta</Link>
               </Button>
             </div>
-            <p className="mt-3 text-xs opacity-75">“Sortear e ver a vencedora” abre o telão do sorteio — só funciona com o login da Marta.</p>
+            <p className="mt-3 text-xs opacity-75">“Girar a roleta” abre a aba Sorteio — só a Marta, com o login dela, consegue girar.</p>
           </div>
           <div className="mx-auto rounded-2xl bg-white p-4 text-center shadow-lg">
-            <QRCodeSVG value={`${window.location.origin}/treinamento/sorteio`} size={180} level="M" marginSize={0} fgColor="#13213c" />
+            <QRCodeSVG value={`${window.location.origin}/sorteio#cadastro`} size={180} level="M" marginSize={0} fgColor="#13213c" />
             <p className="mt-2 text-xs font-semibold">Escaneie para participar</p>
           </div>
         </div>

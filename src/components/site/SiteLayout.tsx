@@ -11,6 +11,7 @@ const TITULOS: Record<string, string> = {
   "/palestras": "Palestras",
   "/treinamento": "Treinamento: Minha história",
   "/ebooks": "E-books grátis",
+  "/sorteio": "Sorteio ao vivo",
   "/planilha-gratis": "Planilha grátis",
   "/diagnostico": "Diagnóstico financeiro grátis",
   "/blog": "Conteúdo",

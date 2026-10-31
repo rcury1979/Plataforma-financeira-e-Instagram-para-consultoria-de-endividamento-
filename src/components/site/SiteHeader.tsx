@@ -8,6 +8,7 @@ const links = [
   { to: "/cursos", label: "Cursos" },
   { to: "/palestras", label: "Palestras" },
   { to: "/treinamento", label: "Treinamento" },
+  { to: "/sorteio", label: "Sorteio" },
   { to: "/ebooks", label: "E-books Grátis" },
   { to: "/planilha-gratis", label: "Planilha Grátis" },
   { to: "/diagnostico", label: "Diagnóstico Grátis" },

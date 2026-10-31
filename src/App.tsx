@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter as WebRouter, HashRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter as WebRouter, HashRouter, Routes, Route, Navigate } from "react-router-dom";
 
 // Build de teste (VITE_TEST_SITE=1) usa rotas com # para funcionar em qualquer endereço.
 const BrowserRouter = import.meta.env.VITE_TEST_SITE === "1" ? HashRouter : WebRouter;
@@ -13,7 +13,6 @@ const Palestras = lazy(() => import("./pages/Palestras"));
 const Treinamento = lazy(() => import("./pages/Treinamento"));
 const Ebooks = lazy(() => import("./pages/Ebooks"));
 const Sorteio = lazy(() => import("./pages/Sorteio"));
-const SorteioPainel = lazy(() => import("./pages/SorteioPainel"));
 const Videos = lazy(() => import("./pages/Videos"));
 const Diagnostico = lazy(() => import("./pages/Diagnostico"));
 const Blog = lazy(() => import("./pages/Blog"));
@@ -109,8 +108,8 @@ const App = () => (
           <Route path="/palestras" element={<Palestras />} />
           <Route path="/treinamento" element={<Treinamento />} />
           <Route path="/ebooks" element={<Ebooks />} />
-          <Route path="/treinamento/sorteio" element={<Sorteio />} />
-          <Route path="/treinamento/sorteio/painel" element={<SorteioPainel />} />
+          <Route path="/treinamento/sorteio" element={<Navigate to="/sorteio#cadastro" replace />} />
+          <Route path="/treinamento/sorteio/painel" element={<Navigate to="/sorteio#roleta" replace />} />
           <Route path="/sorteio" element={<Sorteio />} />
           <Route path="/diagnostico" element={<Diagnostico />} />
           <Route path="/videos" element={<Videos />} />
