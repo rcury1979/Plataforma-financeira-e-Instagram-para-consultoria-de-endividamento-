@@ -237,8 +237,8 @@ export default function Treinamento() {
             <h2 className="mt-3 font-display text-4xl">Nossa origem não precisa determinar nosso futuro.</h2>
             <p className="mt-5 text-white/75">Conhecimento, planejamento e coragem para fazer escolhas podem abrir novos caminhos.</p>
             <blockquote className="mt-8 border-l-4 border-gold pl-5">
-              <p className="font-display text-2xl italic">“Eu e a minha casa serviremos ao Senhor.”</p>
-              <p className="mt-2 font-semibold text-gold">Josué 24:15</p>
+              <p className="font-display text-2xl italic">“Examina uma propriedade e adquire-a; planta uma vinha com as rendas do seu trabalho.”</p>
+              <p className="mt-2 font-semibold text-gold">Provérbios 31:16</p>
             </blockquote>
             <p className="mt-8 text-lg font-semibold">Marta Cury</p>
             <p className="text-gold">R&M Consultoria</p>
