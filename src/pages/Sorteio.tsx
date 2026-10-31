@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { QRCodeSVG } from "qrcode.react";
-import { Gift, Loader2, Lock, Maximize2, Plus, QrCode, RotateCcw, Trash2, Trophy, Users } from "lucide-react";
+import { Gift, Loader2, Maximize2, Plus, QrCode, RotateCcw, Trash2, Trophy, Users } from "lucide-react";
 import SiteLayout from "@/components/site/SiteLayout";
 import RoletaSorteio, { anguloAlvo, type Fatia } from "@/components/site/RoletaSorteio";
 import { Button } from "@/components/ui/button";
@@ -278,31 +278,27 @@ export default function Sorteio() {
                   <p className="text-xl text-muted-foreground">{fatias.length ? "A roleta está pronta. Quem será a sortuda?" : "A roleta vai se enchendo de bonequinhos conforme as pessoas se cadastram."}</p>
                 )}
 
-                {admin ? (
-                  <div className="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
-                    {!vencedor && (
-                      <Button size="lg" disabled={girando || fatias.length === 0} onClick={() => girar(false)}
-                        className="h-16 rounded-full px-10 text-xl font-bold hover:opacity-90" style={{ background: OURO, color: NAVY }}>
-                        {girando ? <Loader2 className="h-6 w-6 animate-spin" /> : <>🎡 Girar a roleta</>}
-                      </Button>
-                    )}
-                    {vencedor && fatias.length > 1 && (
-                      <Button size="lg" variant="outline" disabled={girando} onClick={() => girar(true)} className="h-16 rounded-full px-6">
-                        <RotateCcw className="mr-2 h-5 w-5" /> Girar de novo (outra pessoa)
-                      </Button>
-                    )}
-                    <Button size="lg" variant="ghost" className="h-16 rounded-full" onClick={() => document.documentElement.requestFullscreen?.().catch(() => {})}>
-                      <Maximize2 className="mr-2 h-5 w-5" /> Tela cheia
+                <div className="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
+                  {!vencedor && (
+                    <Button size="lg" disabled={girando || fatias.length === 0} onClick={() => girar(false)}
+                      className="h-16 rounded-full px-10 text-xl font-bold hover:opacity-90" style={{ background: OURO, color: NAVY }}>
+                      {girando ? <Loader2 className="h-6 w-6 animate-spin" /> : <>🎡 Girar a roleta</>}
                     </Button>
-                  </div>
-                ) : (
-                  <p className="mt-8 text-sm text-muted-foreground">
-                    <Lock className="mr-1 inline h-4 w-4" /> Só a Marta gira a roleta, ao vivo.{" "}
-                    <Link to={`/app/auth?next=${encodeURIComponent("/sorteio#roleta")}`} className="underline underline-offset-4">Sou a Marta — entrar</Link>
-                  </p>
-                )}
+                  )}
+                  {admin && vencedor && fatias.length > 1 && (
+                    <Button size="lg" variant="outline" disabled={girando} onClick={() => girar(true)} className="h-16 rounded-full px-6">
+                      <RotateCcw className="mr-2 h-5 w-5" /> Girar de novo (outra pessoa)
+                    </Button>
+                  )}
+                  <Button size="lg" variant="ghost" className="h-16 rounded-full" onClick={() => document.documentElement.requestFullscreen?.().catch(() => {})}>
+                    <Maximize2 className="mr-2 h-5 w-5" /> Tela cheia
+                  </Button>
+                </div>
                 {erroRoleta && <p role="alert" className="mt-4 rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">{erroRoleta}</p>}
-                {admin && <p className="mt-3 text-xs text-muted-foreground">Ao girar, as inscrições se encerram. “Girar de novo” é para quando a vencedora não estiver presente.</p>}
+                <p className="mt-3 text-xs text-muted-foreground">
+                  Qualquer pessoa pode girar — mas só uma vez: ao girar, as inscrições se encerram.
+                  {admin ? " “Girar de novo” (só você vê) é para quando a vencedora não estiver presente." : <> Para girar de novo, só a Marta: <Link to={`/app/auth?next=${encodeURIComponent("/sorteio#roleta")}`} className="underline underline-offset-4">entrar</Link>.</>}
+                </p>
               </div>
             </div>
           </Passo>
