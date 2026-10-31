@@ -1,7 +1,8 @@
 /* Treinamento — palestra "Minha história: da origem à autonomia", de Marta Cury. */
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { Download, Instagram, MessageCircle, ArrowRight, Presentation, Gift } from "lucide-react";
+import { Download, Instagram, MessageCircle, ArrowRight, Presentation, Gift, Smartphone, Trophy } from "lucide-react";
+import { QRCodeSVG } from "qrcode.react";
 import ApresentacaoSlides from "@/components/site/ApresentacaoSlides";
 import SiteLayout from "@/components/site/SiteLayout";
 import { Button } from "@/components/ui/button";
@@ -48,6 +49,9 @@ export default function Treinamento() {
               <Button asChild size="lg" variant="outline" className="border-white/40 bg-transparent text-white hover:bg-white/10 hover:text-white">
                 <Link to="/palestras">Levar esta palestra <ArrowRight className="ml-2 h-4 w-4" /></Link>
               </Button>
+              <Button asChild size="lg" variant="outline" className="border-gold bg-transparent text-gold hover:bg-white/10 hover:text-gold">
+                <a href="#sorteio"><Gift className="mr-2 h-4 w-4" /> Sorteio ao vivo</a>
+              </Button>
             </div>
           </div>
           <Foto src="marta-capa.jpg" alt="Marta Cury" className="max-h-[560px] object-top" />
@@ -68,16 +72,26 @@ export default function Treinamento() {
       </section>
 
       {/* Sorteio ao vivo */}
-      <section className="bg-gold py-10">
-        <div className="container-prose flex flex-col items-center justify-between gap-5 text-center text-[hsl(222_47%_14%)] md:flex-row md:text-left">
-          <div>
+      <section id="sorteio" className="scroll-mt-24 bg-gold py-12">
+        <div className="container-prose grid items-center gap-8 text-[hsl(222_47%_14%)] md:grid-cols-[1fr_auto]">
+          <div className="text-center md:text-left">
             <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.25em]"><Gift className="h-4 w-4" /> Sorteio ao vivo</span>
-            <h2 className="mt-2 font-display text-3xl">Está na palestra? Concorra a uma consultoria financeira gratuita</h2>
-            <p className="mt-1">Escolha seu bonequinho, preencha seus dados e acompanhe o resultado no telão. 🍀</p>
+            <h2 className="mt-2 font-display text-3xl lg:text-4xl">Está na palestra? Concorra a uma consultoria financeira gratuita</h2>
+            <p className="mt-2">Aponte a câmera do celular para o QR Code, escolha seu bonequinho e preencha seus dados. O resultado sai ao vivo no telão. 🍀</p>
+            <div className="mt-6 flex flex-wrap justify-center gap-3 md:justify-start">
+              <Button asChild size="lg" className="rounded-full bg-[hsl(222_47%_14%)] px-8 text-white hover:bg-[hsl(222_47%_20%)]">
+                <Link to="/treinamento/sorteio"><Smartphone className="mr-2 h-4 w-4" /> Participar do sorteio</Link>
+              </Button>
+              <Button asChild size="lg" variant="outline" className="rounded-full border-[hsl(222_47%_14%)] bg-transparent px-8 text-[hsl(222_47%_14%)] hover:bg-white/30">
+                <Link to="/treinamento/sorteio/painel"><Trophy className="mr-2 h-4 w-4" /> Sortear e ver a vencedora</Link>
+              </Button>
+            </div>
+            <p className="mt-3 text-xs opacity-75">“Sortear e ver a vencedora” abre o telão do sorteio — só funciona com o login da Marta.</p>
           </div>
-          <Button asChild size="lg" className="shrink-0 rounded-full bg-[hsl(222_47%_14%)] px-8 text-white hover:bg-[hsl(222_47%_20%)]">
-            <Link to="/treinamento/sorteio">Participar do sorteio <ArrowRight className="ml-2 h-4 w-4" /></Link>
-          </Button>
+          <div className="mx-auto rounded-2xl bg-white p-4 text-center shadow-lg">
+            <QRCodeSVG value={`${window.location.origin}/treinamento/sorteio`} size={180} level="M" marginSize={0} fgColor="#13213c" />
+            <p className="mt-2 text-xs font-semibold">Escaneie para participar</p>
+          </div>
         </div>
       </section>
 
