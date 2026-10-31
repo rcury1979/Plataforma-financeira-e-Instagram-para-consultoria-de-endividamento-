@@ -87,7 +87,7 @@ export default function Treinamento() {
       {/* Formação */}
       <section className="bg-secondary/50 py-16 lg:py-20">
         <div className="container-prose grid items-center gap-10 lg:grid-cols-2">
-          <Foto src="formatura.jpg" alt="Marta Cury na formatura de Direito" className="order-2 max-h-[520px] lg:order-1" />
+          <img src={img("formatura-sem-fundo.png")} alt="Marta Cury na formatura de Direito" loading="lazy" className="order-2 mx-auto max-h-[560px] w-auto object-contain lg:order-1" />
           <div className="order-1 lg:order-2">
             <Rotulo>Formação</Rotulo>
             <h2 className="mt-3 font-display text-4xl text-foreground">Eu investi em mim</h2>
