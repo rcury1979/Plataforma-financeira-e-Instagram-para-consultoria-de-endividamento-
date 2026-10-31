@@ -339,6 +339,45 @@ export default function Index() {
         </div>
       </section>
 
+      {/* ASSINATURA DO APP */}
+      <section id="assinatura" className="py-20 lg:py-28 scroll-mt-24">
+        <div className="container-prose">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium mb-4">
+              <Smartphone className="w-3.5 h-3.5" /> Assinatura do app R&M 360°
+            </div>
+            <h2 className="font-display text-3xl lg:text-5xl leading-tight">Comece com <span className="text-gradient-warm">7 dias grátis</span></h2>
+            <p className="mt-4 text-muted-foreground text-lg">
+              Organize contas, cartões, dívidas e metas com o Método GCPM. Cancele no teste grátis sem pagar nada.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {[
+              { id: "6m", nome: "Contrato de 6 meses", preco: "R$ 25,99", obs: "6 mensalidades · total de R$ 155,94" },
+              { id: "12m", nome: "Contrato de 12 meses", preco: "R$ 21,99", obs: "12 mensalidades · economia de R$ 48 no ano", destaque: true },
+            ].map((p) => (
+              <div key={p.id} className={`relative rounded-[2rem] border p-8 bg-card flex flex-col ${p.destaque ? "border-primary shadow-warm" : "border-border"}`}>
+                {p.destaque && <span className="absolute -top-3 left-8 rounded-full gradient-warm px-3 py-1 text-xs font-semibold text-primary-foreground">Mais escolhido</span>}
+                <h3 className="font-display text-2xl">{p.nome}</h3>
+                <p className="mt-4"><span className="font-display text-5xl text-foreground">{p.preco}</span><span className="text-muted-foreground">/mês</span></p>
+                <p className="mt-2 text-sm text-muted-foreground">{p.obs}</p>
+                <ul className="mt-6 space-y-2 text-sm text-foreground/85 flex-1">
+                  {["7 dias grátis para testar", "Área do cliente completa", "Celular e computador"].map((t) => (
+                    <li key={t} className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" />{t}</li>
+                  ))}
+                </ul>
+                <Button asChild size="lg" className={`mt-8 rounded-full ${p.destaque ? "gradient-warm text-primary-foreground border-0" : ""}`} variant={p.destaque ? "default" : "outline"}>
+                  <Link to={`/planos?plano=${p.id}`}>Assinar com 7 dias grátis <ArrowRight className="ml-2 w-4 h-4" /></Link>
+                </Button>
+              </div>
+            ))}
+          </div>
+          <p className="mt-6 text-center text-sm text-muted-foreground">
+            Cliente da consultoria já tem o app incluso. <Link to="/planos" className="text-primary underline underline-offset-4">Ver detalhes dos planos</Link>
+          </p>
+        </div>
+      </section>
+
       {/* BAIXE O APP */}
       <section className="py-20 lg:py-28 bg-secondary/40">
         <div className="container-prose">

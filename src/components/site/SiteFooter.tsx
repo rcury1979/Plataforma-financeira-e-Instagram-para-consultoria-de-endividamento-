@@ -37,6 +37,7 @@ export default function SiteFooter() {
             <li><Link to="/palestras" className="hover:text-primary transition">Palestras</Link></li>
             <li><Link to="/treinamento" className="hover:text-primary transition">Treinamento</Link></li>
             <li><Link to="/ebooks" className="hover:text-primary transition">E-books grátis</Link></li>
+            <li><Link to="/planos" className="hover:text-primary transition">Assinar o app</Link></li>
             <li><Link to="/planilha-gratis" className="hover:text-primary transition">Planilha grátis</Link></li>
             <li><Link to="/quero-ajuda" className="hover:text-primary transition">Quero ser ajudado</Link></li>
             <li><Link to="/agendar" className="hover:text-primary transition">Agendar conversa</Link></li>

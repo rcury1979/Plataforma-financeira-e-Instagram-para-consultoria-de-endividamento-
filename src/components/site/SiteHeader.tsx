@@ -14,6 +14,7 @@ const links = [
   { to: "/videos", label: "Vídeos" },
   { to: "/blog", label: "Conteúdo" },
   { to: "/sobre", label: "Sobre" },
+  { to: "/planos", label: "Assinar o App" },
 ];
 
 export default function SiteHeader() {
