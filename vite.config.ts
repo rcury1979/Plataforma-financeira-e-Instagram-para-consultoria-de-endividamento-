@@ -27,8 +27,9 @@ export default defineConfig(({ mode }) => ({
       manifest: false,
       workbox: {
         globPatterns: ["**/*.{js,css,html,svg,png,ico,webmanifest,woff2}"],
-        navigateFallback: "/index.html",
-        navigateFallbackDenylist: [/^\/~oauth/, /^\/api\//],
+        // Sem fallback do cache para páginas: a página sempre vem da rede primeiro (regra NetworkFirst abaixo),
+        // assim quem abre um link novo (ex.: QR Code do sorteio) nunca recebe uma versão antiga do site.
+        navigateFallback: null,
         cleanupOutdatedCaches: true,
         runtimeCaching: [
           {
