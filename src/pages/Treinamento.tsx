@@ -205,20 +205,25 @@ export default function Treinamento() {
         <div className="container-prose">
           <Rotulo>Bem-estar financeiro</Rotulo>
           <h2 className="mt-3 font-display text-4xl text-foreground">O Mapa do Bem-Estar</h2>
+          <p className="mt-3 text-muted-foreground">Quatro dimensões que combinam segurança e liberdade — hoje e amanhã.</p>
           <div className="mt-8 grid gap-4 md:grid-cols-2">
             {[
-              ["Segurança + Hoje", "Controle", "as contas cabem no bolso.", "fazer compras no comércio do bairro sem precisar de fiado."],
-              ["Liberdade + Hoje", "Escolha", "aproveitar a vida agora.", "comprar um presente ou uma comida especial sem culpa."],
-              ["Segurança + Amanhã", "Proteção", "o barco aguenta o tranco.", "ter um valor guardado para quando alguém adoece."],
-              ["Liberdade + Amanhã", "Rumo", "estar no caminho do sonho.", "conseguir guardar dinheiro para reformar a casa."],
-            ].map(([q, t, o, ex]) => (
-              <div key={t} className="rounded-xl bg-card p-6">
-                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">{q}</span>
-                <h3 className="mt-2 text-2xl font-semibold text-foreground">{t}</h3>
-                <p className="mt-1 text-foreground"><strong>O que é:</strong> {o}</p>
-                <p className="mt-2 text-sm italic text-muted-foreground">Ex.: {ex}</p>
-              </div>
-            ))}
+              ["Segurança · Hoje", "Controle", "renda e despesas sob comando — as contas fecham e você sabe para onde vai cada real.", "fornecedores, equipe e casa pagos em dia, sem recorrer ao cartão ou ao cheque especial.", "Quem controla o dinheiro deixa de ser controlada por ele."],
+              ["Liberdade · Hoje", "Escolha", "viver o presente com consciência — gastar com o que importa, sem culpa e sem comprometer o amanhã.", "investir em você, viajar com a família ou celebrar uma conquista com o valor já previsto.", "Prosperidade não é privação: é decidir com intenção."],
+              ["Segurança · Amanhã", "Proteção", "uma estrutura que resiste aos imprevistos — reserva de emergência, seguros e capital de giro.", "atravessar um mês fraco de vendas ou uma doença na família sem contrair novas dívidas.", "Tempestades chegam para todas. Preparada, você não afunda."],
+              ["Liberdade · Amanhã", "Rumo", "patrimônio construído com propósito — metas claras e investimentos que trabalham por você.", "expandir o negócio, conquistar a casa própria ou planejar a aposentadoria com data marcada.", "Sonho com plano e prazo deixa de ser sonho: vira projeto."],
+            ].map(([q, t, o, pr, frase], i) => {
+              const escuro = i === 1 || i === 2;
+              return (
+                <div key={t} className={`rounded-xl p-6 ${escuro ? "bg-[hsl(222_47%_14%)] text-white" : "bg-card"}`}>
+                  <span className={`text-xs font-semibold uppercase tracking-[0.2em] ${escuro ? "text-gold" : "text-primary"}`}>{q}</span>
+                  <h3 className={`mt-2 font-display text-3xl ${escuro ? "text-gold" : "text-foreground"}`}>{t}</h3>
+                  <p className={`mt-2 ${escuro ? "text-white/85" : "text-foreground/85"}`}><strong>O que é:</strong> {o}</p>
+                  <p className={`mt-2 ${escuro ? "text-white/85" : "text-foreground/85"}`}><strong>Na prática:</strong> {pr}</p>
+                  <p className={`mt-4 border-l-2 border-gold pl-3 font-display text-lg italic ${escuro ? "text-white" : "text-foreground"}`}>{frase}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
