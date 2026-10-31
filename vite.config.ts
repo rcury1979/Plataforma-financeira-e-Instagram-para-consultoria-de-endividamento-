@@ -52,9 +52,10 @@ export default defineConfig(({ mode }) => ({
           },
           {
             urlPattern: ({ request, sameOrigin }) => sameOrigin && request.destination === "image",
-            handler: "CacheFirst",
+            // Imagens de /public não têm hash no nome: mostra a do cache e já busca a nova.
+            handler: "StaleWhileRevalidate",
             options: {
-              cacheName: "images",
+              cacheName: "images-v2",
               expiration: { maxEntries: 80, maxAgeSeconds: 60 * 60 * 24 * 30 },
             },
           },

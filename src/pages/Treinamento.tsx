@@ -6,7 +6,9 @@ import ApresentacaoSlides from "@/components/site/ApresentacaoSlides";
 import SiteLayout from "@/components/site/SiteLayout";
 import { Button } from "@/components/ui/button";
 
-const img = (f: string) => `${import.meta.env.BASE_URL}treinamento/${f}`;
+// Mude VERSAO sempre que trocar slides, fotos ou o PDF: força o navegador a buscar os arquivos novos.
+const VERSAO = "2026-10-30c";
+const img = (f: string) => `${import.meta.env.BASE_URL}treinamento/${f}?v=${VERSAO}`;
 const PDF = img("minha-historia-marta-cury.pdf");
 const SLIDES = Array.from({ length: 14 }, (_, n) => img(`slides/${String(n + 1).padStart(2, "0")}.jpg`));
 const WHATSAPP = "https://wa.me/5521986000039";
