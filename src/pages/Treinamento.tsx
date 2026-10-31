@@ -1,7 +1,7 @@
 /* Treinamento — palestra "Minha história: da origem à autonomia", de Marta Cury. */
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { Download, Instagram, MessageCircle, ArrowRight, Presentation } from "lucide-react";
+import { Download, Instagram, MessageCircle, ArrowRight, Presentation, Gift } from "lucide-react";
 import ApresentacaoSlides from "@/components/site/ApresentacaoSlides";
 import SiteLayout from "@/components/site/SiteLayout";
 import { Button } from "@/components/ui/button";
@@ -64,6 +64,20 @@ export default function Treinamento() {
           </div>
           <ApresentacaoSlides slides={SLIDES} titulo="Minha história — Marta Cury" aberto={apresentando}
             onAbrir={() => setApresentando(true)} onFechar={() => setApresentando(false)} />
+        </div>
+      </section>
+
+      {/* Sorteio ao vivo */}
+      <section className="bg-gold py-10">
+        <div className="container-prose flex flex-col items-center justify-between gap-5 text-center text-[hsl(222_47%_14%)] md:flex-row md:text-left">
+          <div>
+            <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.25em]"><Gift className="h-4 w-4" /> Sorteio ao vivo</span>
+            <h2 className="mt-2 font-display text-3xl">Está na palestra? Concorra a uma consultoria financeira gratuita</h2>
+            <p className="mt-1">Escolha seu bonequinho, preencha seus dados e acompanhe o resultado no telão. 🍀</p>
+          </div>
+          <Button asChild size="lg" className="shrink-0 rounded-full bg-[hsl(222_47%_14%)] px-8 text-white hover:bg-[hsl(222_47%_20%)]">
+            <Link to="/treinamento/sorteio">Participar do sorteio <ArrowRight className="ml-2 h-4 w-4" /></Link>
+          </Button>
         </div>
       </section>
 
