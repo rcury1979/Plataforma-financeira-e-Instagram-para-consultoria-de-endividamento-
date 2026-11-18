@@ -26,6 +26,9 @@ jobs:
             echo "::error::Falta o segredo SUPABASE_ACCESS_TOKEN no GitHub (Settings → Secrets → Actions)."
             exit 1
           fi
+          # remove espaços/quebras de linha que às vezes vêm junto ao colar o token
+          export SUPABASE_ACCESS_TOKEN="$(printf '%s' "$SUPABASE_ACCESS_TOKEN" | tr -d '[:space:]')"
+          case "$SUPABASE_ACCESS_TOKEN" in sbp_*) ;; *) echo "::error::O segredo SUPABASE_ACCESS_TOKEN não começa com sbp_ (foi colado outro texto)."; exit 1;; esac
           falhas=""
           for d in supabase/functions/*/; do
             f=$(basename "$d")
