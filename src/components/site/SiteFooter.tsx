@@ -100,7 +100,7 @@ export default function SiteFooter() {
       <div className="border-t border-border">
         <div className="container-prose py-6 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
           <span>© {new Date().getFullYear()} RM Consultoria — Marta Cury. Todos os direitos reservados.</span>
-          <span>Feito com cuidado para quem quer recomeçar.</span>
+          <span><Link to="/privacidade" className="underline underline-offset-2 hover:text-primary">Política de Privacidade</Link> · Feito com cuidado para quem quer recomeçar.</span>
         </div>
       </div>
     </footer>

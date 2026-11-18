@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { temAcessoApp } from "@/lib/acesso";
 import { db, MesProvider } from "./_shared";
 import { CATEGORIAS_PADRAO } from "./_icons";
+import { GastoPorVoz } from "./_GastoPorVoz";
 
 export const CLIENTE_NAV = [
   { to: "/cliente", label: "Dashboard", icon: LayoutDashboard, end: true },
@@ -70,6 +71,7 @@ export default function ClienteLayout() {
   const location = useLocation();
   const [ready, setReady] = useState(false);
   const [nome, setNome] = useState("");
+  const [uid, setUid] = useState<string | null>(null);
   const [drawer, setDrawer] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
 
@@ -95,6 +97,7 @@ export default function ClienteLayout() {
       }
       if (!alive) return;
       setNome(prof?.full_name || session.user.email || "");
+      setUid(uid);
       setReady(true);
     })();
     return () => { alive = false; };
@@ -184,11 +187,12 @@ export default function ClienteLayout() {
           </div>
         )}
 
-        <main className="min-w-0 flex-1 px-4 pb-16 pt-6 sm:px-6 lg:px-10 lg:pt-10">
+        <main className="min-w-0 flex-1 px-4 pb-28 pt-6 sm:px-6 lg:px-10 lg:pt-10">
           <div className="mx-auto max-w-[1100px]">
             <Outlet />
           </div>
         </main>
+        {uid && <GastoPorVoz userId={uid} />}
       </div>
     </MesProvider>
   );

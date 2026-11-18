@@ -1,12 +1,24 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Loader2, Eye, EyeOff, User, Building2 } from "lucide-react";
+
+/** Mensagens do Supabase em português, com o que a pessoa deve fazer. */
+function mensagemErro(msg: string): string {
+  const m = (msg || "").toLowerCase();
+  if (m.includes("rate limit") || m.includes("too many")) return "Muitas tentativas em pouco tempo. Aguarde alguns minutos e tente de novo.";
+  if (m.includes("already registered") || m.includes("already been registered")) return "Este e-mail já tem cadastro. Use \"Entrar\" ou \"Esqueci minha senha\".";
+  if (m.includes("email not confirmed")) return "Seu e-mail ainda não foi confirmado. Abra o e-mail que enviamos ou toque em \"Reenviar e-mail de confirmação\".";
+  if (m.includes("invalid login") || m.includes("invalid credentials")) return "E-mail ou senha incorretos.";
+  if (m.includes("password should be at least") || m.includes("weak password")) return "A senha precisa ter pelo menos 6 caracteres.";
+  if (m.includes("invalid") && m.includes("email")) return "Confira se o e-mail foi digitado corretamente.";
+  if (m.includes("error sending") || m.includes("smtp")) return "Não conseguimos enviar o e-mail agora. Tente de novo em alguns minutos.";
+  return msg || "Erro ao autenticar";
+}
 
 function safeNext(value: string | null): string {
   if (!value) return "/app";
@@ -26,6 +38,17 @@ export default function Auth() {
   const [nome, setNome] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [aguardandoConfirmacao, setAguardandoConfirmacao] = useState(false);
+
+  const emailRedirect = () => `${window.location.origin}/app/auth?next=${encodeURIComponent(next !== "/app" ? next : "/app/brindes")}`;
+  const reenviarConfirmacao = async () => {
+    if (!email) return toast.error("Digite seu e-mail para reenviar a confirmação.");
+    setLoading(true);
+    const { error } = await supabase.auth.resend({ type: "signup", email, options: { emailRedirectTo: emailRedirect() } });
+    setLoading(false);
+    if (error) toast.error(mensagemErro(error.message));
+    else toast.success("Enviamos de novo. Confira a caixa de entrada e o spam.");
+  };
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -46,18 +69,21 @@ export default function Auth() {
           email,
           password,
           options: {
-            emailRedirectTo: `${window.location.origin}/app/auth?next=${encodeURIComponent(next !== "/app" ? next : "/app/brindes")}`,
+            emailRedirectTo: emailRedirect(),
             data: { full_name: nome, tipo_pessoa: tipoPessoa },
           },
         });
         if (error) throw error;
+        setAguardandoConfirmacao(true);
         toast.success(next.startsWith("/planos") ? "Conta criada! Abra o e-mail de confirmação que enviamos — o link traz você de volta para concluir o pagamento." : "Conta criada! Confirme seu e-mail para receber seus dois e-books de presente.");
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
       }
     } catch (err: any) {
-      toast.error(err.message ?? "Erro ao autenticar");
+      const msg = mensagemErro(err?.message ?? "");
+      if (/not confirmed/i.test(err?.message ?? "")) setAguardandoConfirmacao(true);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -66,10 +92,11 @@ export default function Auth() {
   const handleGoogle = async () => {
     setLoading(true);
     try {
-      const res = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: `${window.location.origin}${next}`,
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: { redirectTo: `${window.location.origin}/app/auth?next=${encodeURIComponent(next)}` },
       });
-      if (res.error) toast.error("Falha no Google Sign-in");
+      if (error) toast.error("Falha no Google Sign-in");
     } catch (err: any) {
       toast.error(err.message ?? "Erro no Google");
     } finally {
@@ -84,7 +111,7 @@ export default function Auth() {
       redirectTo: `${window.location.origin}/reset-password`,
     });
     setLoading(false);
-    if (error) toast.error(error.message);
+    if (error) toast.error(mensagemErro(error.message));
     else toast.success("Enviamos um link de redefinição para seu e-mail.");
   };
 
@@ -199,6 +226,8 @@ export default function Auth() {
           </Button>
         </form>
 
+        {/* Login com Google: só aparece quando VITE_GOOGLE_LOGIN=1 (precisa ativar o Google no Supabase antes). */}
+        {import.meta.env.VITE_GOOGLE_LOGIN === "1" && (<>
         <div className="relative my-6">
           <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-border" /></div>
           <div className="relative flex justify-center text-[11px] uppercase tracking-wider">
@@ -215,6 +244,15 @@ export default function Auth() {
           </svg>
           Entrar com Google
         </Button>
+        </>)}
+
+        {aguardandoConfirmacao && (
+          <div className="mt-6 rounded-2xl border border-gold/40 bg-gold-soft p-4 text-sm">
+            <p className="font-semibold text-primary">Confirme seu e-mail</p>
+            <p className="mt-1 text-muted-foreground">Enviamos um link para <b className="text-foreground">{email}</b>. Abra o e-mail (confira também o spam/lixo eletrônico) e toque em confirmar.</p>
+            <button type="button" onClick={reenviarConfirmacao} disabled={loading} className="mt-2 font-medium text-primary underline underline-offset-2">Reenviar e-mail de confirmação</button>
+          </div>
+        )}
 
         <div className="mt-6 space-y-3 text-center text-sm">
           {mode === "login" && (

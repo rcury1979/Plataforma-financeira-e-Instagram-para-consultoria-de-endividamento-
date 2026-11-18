@@ -15,6 +15,12 @@ export function useLancamentos(userId: string | null) {
     setLoading(false);
   }, [userId]);
   useEffect(() => { load(); }, [load]);
+  // lançamento feito pelo botão "Falar gasto" atualiza a tela aberta
+  useEffect(() => {
+    const h = () => { load(); };
+    window.addEventListener("rm:lancamento-salvo", h);
+    return () => window.removeEventListener("rm:lancamento-salvo", h);
+  }, [load]);
 
   /** Alterna pago/pendente com atualização otimista. */
   const togglePago = async (l: Lancamento) => {

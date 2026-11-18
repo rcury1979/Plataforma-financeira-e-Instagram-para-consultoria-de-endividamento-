@@ -17,6 +17,7 @@ const Videos = lazy(() => import("./pages/Videos"));
 const Diagnostico = lazy(() => import("./pages/Diagnostico"));
 const Blog = lazy(() => import("./pages/Blog"));
 const Sobre = lazy(() => import("./pages/Sobre"));
+const Privacidade = lazy(() => import("./pages/Privacidade"));
 const Contato = lazy(() => import("./pages/Contato"));
 const PlanilhaGratis = lazy(() => import("./pages/PlanilhaGratis"));
 const ComoInstalar = lazy(() => import("./pages/ComoInstalar"));
@@ -97,7 +98,7 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
-      <Sonner />
+      <Sonner position="top-center" />
       <BrowserRouter>
         <Suspense fallback={<div className="flex min-h-screen items-center justify-center text-muted-foreground">Carregando…</div>}>
         <Routes>
@@ -115,6 +116,8 @@ const App = () => (
           <Route path="/videos" element={<Videos />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/sobre" element={<Sobre />} />
+          <Route path="/privacidade" element={<Privacidade />} />
+          <Route path="/politica-de-privacidade" element={<Privacidade />} />
           <Route path="/contato" element={<Contato />} />
           <Route path="/planilha-gratis" element={<PlanilhaGratis />} />
           <Route path="/como-instalar" element={<ComoInstalar />} />

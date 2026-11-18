@@ -102,7 +102,7 @@ export default function Sorteio() {
   // Quem chega pelo QR Code (…/sorteio#cadastro) já cai no formulário.
   useEffect(() => {
     if (carregando || !window.location.hash) return;
-    const t = window.setTimeout(() => document.querySelector(window.location.hash)?.scrollIntoView({ block: "start" }), 50);
+    const t = window.setTimeout(() => document.getElementById(window.location.hash.replace(/^#\/?/, "").split("#").pop() || "")?.scrollIntoView({ block: "start" }), 50);
     return () => window.clearTimeout(t);
   }, [carregando]);
 
