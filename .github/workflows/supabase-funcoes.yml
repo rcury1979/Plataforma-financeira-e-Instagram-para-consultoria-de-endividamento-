@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: supabase/setup-cli@v1
         with:
-          version: latest
+          version: 2.33.9
       - name: Publicar todas as funções
         run: |
           if [ -z "$SUPABASE_ACCESS_TOKEN" ]; then
