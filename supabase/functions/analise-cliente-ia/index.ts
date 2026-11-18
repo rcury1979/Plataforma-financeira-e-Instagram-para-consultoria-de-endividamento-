@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { aiConfig, AI_NAO_CONFIGURADA } from "../_shared/ai.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -40,8 +41,8 @@ Deno.serve(async (req) => {
       .eq("cliente_id", clienteId)
       .maybeSingle();
 
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) return json({ error: "LOVABLE_API_KEY não configurada" }, 500);
+    const ai = aiConfig("google/gemini-3.7-flash");
+    if (!ai) return json({ error: AI_NAO_CONFIGURADA }, 500);
 
     const prompt = `Você é assistente de uma educadora financeira brasileira (Método 360°: Educação, Mentoria e Gestão).
 Gere uma ANÁLISE FINANCEIRA em português do Brasil para o cliente abaixo, em markdown, com tom acolhedor,
@@ -59,11 +60,11 @@ Estruture exatamente com estes títulos:
 ## Hábitos para construir
 ## Próximo passo com a mentoria`;
 
-    const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const resp = await fetch(ai.url, {
       method: "POST",
-      headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
+      headers: ai.headers,
       body: JSON.stringify({
-        model: "google/gemini-3.7-flash",
+        model: ai.model,
         messages: [{ role: "user", content: prompt }],
       }),
     });

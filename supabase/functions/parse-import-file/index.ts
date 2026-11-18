@@ -1,6 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.2";
+import { aiConfig, AI_NAO_CONFIGURADA } from "../_shared/ai.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -79,22 +80,19 @@ REGRAS:
 Conteúdo do arquivo:
 ${textContent.substring(0, 15000)}`;
 
-    const lovableApiKey = Deno.env.get("LOVABLE_API_KEY");
-    if (!lovableApiKey) {
+    const ai = aiConfig("google/gemini-2.5-flash");
+    if (!ai) {
       return new Response(
-        JSON.stringify({ error: "API key não configurada" }),
+        JSON.stringify({ error: AI_NAO_CONFIGURADA }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    const aiResponse = await fetch("https://api.lovable.dev/v1/chat/completions", {
+    const aiResponse = await fetch(ai.url, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${lovableApiKey}`,
-      },
+      headers: ai.headers,
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
+        model: ai.model,
         messages: [{ role: "user", content: prompt }],
         temperature: 0.1,
       }),

@@ -1,6 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.2";
+import { aiConfig, AI_NAO_CONFIGURADA } from "../_shared/ai.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -74,9 +75,9 @@ serve(async (req) => {
     const CATEGORIAS_RECEITA = isPF ? CATEGORIAS_RECEITA_PF : CATEGORIAS_RECEITA_PJ;
     const CATEGORIAS_DESPESA = isPF ? CATEGORIAS_DESPESA_PF : CATEGORIAS_DESPESA_PJ;
 
-    const apiKey = Deno.env.get("LOVABLE_API_KEY");
-    if (!apiKey) {
-      return new Response(JSON.stringify({ error: "LOVABLE_API_KEY ausente" }), {
+    const ai = aiConfig("google/gemini-3.7-flash");
+    if (!ai) {
+      return new Response(JSON.stringify({ error: AI_NAO_CONFIGURADA }), {
         status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -111,6 +112,8 @@ REGRAS:
         }
       : mime.startsWith("image/")
       ? { type: "image_url", image_url: { url: `data:${mime};base64,${pdfBase64}` } }
+      : ai.url.includes("googleapis.com")
+      ? { type: "image_url", image_url: { url: `data:${mime};base64,${pdfBase64}` } }
       : {
           type: "file",
           file: {
@@ -119,14 +122,11 @@ REGRAS:
           },
         };
 
-    const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const aiRes = await fetch(ai.url, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Lovable-API-Key": apiKey,
-      },
+      headers: ai.headers,
       body: JSON.stringify({
-        model: "google/gemini-3.7-flash",
+        model: ai.model,
         messages: [
           {
             role: "user",

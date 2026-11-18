@@ -20,13 +20,18 @@ jobs:
       - uses: supabase/setup-cli@v1
         with:
           version: latest
-      - name: Publicar funções de pagamento e assinatura
+      - name: Publicar todas as funções
         run: |
           if [ -z "$SUPABASE_ACCESS_TOKEN" ]; then
             echo "::error::Falta o segredo SUPABASE_ACCESS_TOKEN no GitHub (Settings → Secrets → Actions)."
             exit 1
           fi
-          for f in create-checkout payments-webhook create-portal-session chat-assistente registrar-lead-planilha; do
+          falhas=""
+          for d in supabase/functions/*/; do
+            f=$(basename "$d")
+            [ "$f" = "_shared" ] && continue
+            [ -f "$d/index.ts" ] || continue
             echo "→ $f"
-            supabase functions deploy "$f" --project-ref "$PROJECT_REF" --use-api
+            supabase functions deploy "$f" --project-ref "$PROJECT_REF" --use-api || falhas="$falhas $f"
           done
+          if [ -n "$falhas" ]; then echo "::error::Falharam:$falhas"; exit 1; fi
